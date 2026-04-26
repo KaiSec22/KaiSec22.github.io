@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kai Gallette — Security Portfolio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --bg:          #080c18;
+  --surface:     #0d1426;
+  --card:        #111827;
+  --card-hover:  #162037;
+  --border:      rgba(0, 212, 255, 0.10);
+  --border-hi:   rgba(0, 212, 255, 0.32);
+  --accent:      #00d4ff;
+  --accent-dim:  rgba(0, 212, 255, 0.12);
+  --purple:      #7c5cfc;
+  --purple-dim:  rgba(124, 92, 252, 0.12);
+  --green:       #34d399;
+  --text:        #e2e8f0;
+  --text-dim:    #94a3b8;
+  --text-muted:  #4a5568;
+  --nav-h:       64px;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── DOT GRID BACKGROUND ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(0,212,255,0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; width: 100%;
+  height: var(--nav-h);
+  background: rgba(8, 12, 24, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 100;
+}
+
+.nav-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  letter-spacing: 0.02em;
+}
+.nav-brand .sep { color: var(--text-muted); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+  transform-origin: left;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--accent); }
+.nav-links a:hover::after,
+.nav-links a.active::after { transform: scaleX(1); }
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--green);
+  padding: 0.25rem 0.8rem;
+  border: 1px solid rgba(52, 211, 153, 0.22);
+  border-radius: 100px;
+  background: rgba(52, 211, 153, 0.06);
+  white-space: nowrap;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.3); }
+}
+
+/* ─── LAYOUT ─── */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section { padding: 6rem 0; }
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+.section-divider {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin-bottom: 2.75rem;
+}
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-h);
+}
+
+.hero-inner { max-width: 680px; }
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 1.25rem;
+}
+
+.hero-name {
+  font-size: clamp(2.6rem, 6vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+
+.hero-handle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.hero-tags {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+.hero-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.85rem;
+  border-radius: 5px;
+}
+.hero-tag.cyan {
+  background: var(--accent-dim);
+  border: 1px solid rgba(0, 212, 255, 0.28);
+  color: var(--accent);
+}
+.hero-tag.purple {
+  background: var(--purple-dim);
+  border: 1px solid rgba(124, 92, 252, 0.28);
+  color: var(--purple);
+}
+
+.hero-bio {
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  max-width: 580px;
+  margin-bottom: 1.75rem;
+}
+
+.hero-focus {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.focus-item {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.focus-item::before {
+  content: '//';
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent);
+  font-size: 0.68rem;
+  opacity: 0.8;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #080c18;
+  box-shadow: 0 0 20px rgba(0,212,255,0.2);
+}
+.btn-primary:hover {
+  background: #33dcff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 24px rgba(0,212,255,0.3);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border-hi);
+}
+.btn-ghost:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  transform: translateY(-2px);
+}
+
+/* ─── PROJECT CARDS ─── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.6rem;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  transition: border-color 0.25s, background 0.25s, transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.card-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.card:hover { border-color: var(--border-hi); background: var(--card-hover); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,212,255,0.07); }
+.card:hover .card-glow { opacity: 1; }
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+.card-emoji { font-size: 1.3rem; flex-shrink: 0; }
+
+.card-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.67rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid;
+}
+.tag.c { background: var(--accent-dim); color: var(--accent); border-color: rgba(0,212,255,0.2); }
+.tag.p { background: var(--purple-dim); color: var(--purple); border-color: rgba(124,92,252,0.2); }
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.card-link-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  transition: color 0.2s;
+}
+.card:hover .card-link-text { color: var(--accent); }
+.card-arrow {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: color 0.2s, transform 0.2s;
+}
+.card:hover .card-arrow { color: var(--accent); transform: translateX(4px); }
+
+/* ─── LAB CARDS ─── */
+.labs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lab-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.35rem 1.6rem;
+  text-decoration: none;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+  transition: border-color 0.25s, background 0.25s, transform 0.25s, box-shadow 0.25s;
+  position: relative;
+}
+.lab-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--purple));
+  border-radius: 12px 0 0 12px;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.lab-card:hover {
+  border-color: var(--border-hi);
+  background: var(--card-hover);
+  transform: translateX(5px);
+  box-shadow: -3px 0 0 var(--accent), 8px 0 32px rgba(0,212,255,0.06);
+}
+.lab-card:hover::before { opacity: 1; }
+
+.lab-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: right;
+  letter-spacing: 0.06em;
+}
+
+.lab-body {}
+.lab-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+}
+.lab-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.lab-meta .dot { opacity: 0.4; }
+.lab-desc {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 0.6rem;
+}
+.lab-arrow {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: color 0.2s, transform 0.2s;
+  align-self: center;
+  flex-shrink: 0;
+}
+.lab-card:hover .lab-arrow { color: var(--accent); transform: translateX(4px); }
+
+/* ─── SKILLS ─── */
+.skills-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 3rem;
+}
+.skill-pill {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: all 0.2s;
+  cursor: default;
+}
+.skill-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.skill-pill.hi { border-color: rgba(0,212,255,0.22); color: var(--accent); background: var(--accent-dim); }
+
+/* ─── CONTACT ─── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 3rem;
+  align-items: start;
+}
+.contact-blurb {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  margin-bottom: 1.25rem;
+}
+.contact-links { display: flex; flex-direction: column; gap: 0; }
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+.contact-row:hover { color: var(--accent); }
+.contact-icon {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent-dim);
+  border: 1px solid var(--border-hi);
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.copy-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.copy-btn:hover { color: var(--accent); background: var(--accent-dim); }
+.ext-arrow { margin-left: auto; font-size: 0.7rem; color: var(--text-muted); }
+.contact-row:hover .ext-arrow { color: var(--accent); }
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ─── BACK TO TOP ─── */
+#top-btn {
+  position: fixed;
+  bottom: 1.75rem; right: 1.75rem;
+  width: 40px; height: 40px;
+  background: var(--card);
+  border: 1px solid var(--border-hi);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  font-size: 0.9rem;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.2s, box-shadow 0.2s;
+  z-index: 99;
+}
+#top-btn.show { opacity: 1; pointer-events: all; }
+#top-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,212,255,0.2); }
+
+/* ─── SCROLL ANIMATIONS ─── */
+.fade {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.fade.in { opacity: 1; transform: translateY(0); }
+.fade:nth-child(2) { transition-delay: 0.08s; }
+.fade:nth-child(3) { transition-delay: 0.16s; }
+.fade:nth-child(4) { transition-delay: 0.24s; }
+.fade:nth-child(5) { transition-delay: 0.32s; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 680px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  .container { padding: 0 1.25rem; }
+  section { padding: 4.5rem 0; }
+  .hero-name { font-size: 2.4rem; }
+  .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .lab-card { grid-template-columns: 1fr auto; }
+  .lab-num { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav>
+  <a href="#hero" class="nav-brand">KaiSec22<span class="sep">&thinsp;/</span></a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#labs">Labs</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="status-badge">
+    <div class="status-dot"></div>
+    Open to Roles
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">// Security Portfolio</p>
+      <h1 class="hero-name">Kai Gallette</h1>
+      <span class="hero-handle">@KaiSec22</span>
+      <div class="hero-tags">
+        <span class="hero-tag cyan">Threat Hunting</span>
+        <span class="hero-tag purple">Detection Engineering</span>
+      </div>
+      <p class="hero-bio">
+        I hunt threats and build detections across Microsoft Defender and Sentinel
+        environments — tracking adversaries from first execution through domain compromise,
+        and closing incidents from first alert to containment.
+      </p>
+      <div class="hero-focus">
+        <div class="focus-item">Threat Hunting</div>
+        <div class="focus-item">Incident Response</div>
+        <div class="focus-item">Compliance Automation</div>
+      </div>
+      <div class="hero-cta">
+        <a href="#labs" class="btn btn-primary">View Investigations</a>
+        <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ PROJECTS ══════════════════ -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label">// Built</p>
+    <h2 class="section-title">Projects</h2>
+    <div class="section-divider"></div>
+    <div class="card-grid">
+
+      <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="card fade">
+        <div class="card-glow"></div>
+        <div class="card-top">
+          <p class="card-title">Windows 11 STIG Compliance Scripts</p>
+          <span class="card-emoji">⚙️</span>
+        </div>
+        <p class="card-desc">
+          PowerShell automation scripts implementing Windows 11 DISA STIG controls —
+          account lockout duration, process creation auditing, HTTP printing policy,
+          and multiple additional hardening benchmarks. Each script validates its
+          own output after applying the control.
+        </p>
+        <div class="tag-row">
+          <span class="tag c">PowerShell</span>
+          <span class="tag c">STIG</span>
+          <span class="tag c">Compliance</span>
+          <span class="tag p">Automation</span>
+        </div>
+        <div class="card-foot">
+          <span class="card-link-text">github.com/KaiSec22</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ LABS ══════════════════ -->
+<section id="labs">
+  <div class="container">
+    <p class="section-label">// Investigated</p>
+    <h2 class="section-title">Labs &amp; Investigations</h2>
+    <div class="section-divider"></div>
+    <div class="labs-list">
+
+      <!-- EmberForge -->
+      <a href="https://github.com/KaiSec22/Security-Projects" target="_blank" rel="noopener" class="lab-card fade">
+        <span class="lab-num">01</span>
+        <div class="lab-body">
+          <p class="lab-title">EmberForge Source Leak — 44-Flag Threat Hunt</p>
+          <div class="lab-meta">
+            <span>Microsoft Sentinel</span><span class="dot">·</span>
+            <span>KQL</span><span class="dot">·</span>
+            <span>Sysmon</span><span class="dot">·</span>
+            <span>Apr 2026</span>
+          </div>
+          <p class="lab-desc">
+            Full-chain multi-stage intrusion reconstruction across workstation, server, and Domain Controller.
+            Covered ISO payload delivery via <code style="font-family:'JetBrains Mono',monospace;font-size:0.75em;color:var(--accent)">rundll32</code>,
+            C2 beacon deployment, fodhelper UAC bypass, LSASS credential dump, SMB lateral movement,
+            ntds.dit extraction via volume shadow copy, rclone exfiltration to MEGA, AnyDesk persistence,
+            and wevtutil log clearing. 44 investigation flags completed.
+          </p>
+          <div class="tag-row">
+            <span class="tag c">T1055</span>
+            <span class="tag c">T1003</span>
+            <span class="tag c">T1021</span>
+            <span class="tag c">T1048</span>
+            <span class="tag p">Domain Compromise</span>
+            <span class="tag p">Advanced</span>
+          </div>
+        </div>
+        <span class="lab-arrow">→</span>
+      </a>
+
+      <!-- Sentinel Brute Force IR -->
+      <a href="https://github.com/KaiSec22/Security-Projects" target="_blank" rel="noopener" class="lab-card fade">
+        <span class="lab-num">02</span>
+        <div class="lab-body">
+          <p class="lab-title">Brute Force Detection &amp; Incident Response — Microsoft Sentinel</p>
+          <div class="lab-meta">
+            <span>Microsoft Sentinel</span><span class="dot">·</span>
+            <span>KQL</span><span class="dot">·</span>
+            <span>NIST 800-61</span><span class="dot">·</span>
+            <span>2026</span>
+          </div>
+          <p class="lab-desc">
+            Built a Sentinel scheduled analytics rule detecting repeated failed logons from the same
+            source IP (≥10 attempts / 5h). Worked the resulting incident through the full NIST 800-61
+            lifecycle — investigation with entity graph, failed-to-success validation query,
+            NSG containment to restrict RDP exposure, and structured incident closure.
+          </p>
+          <div class="tag-row">
+            <span class="tag c">T1110</span>
+            <span class="tag c">T1133</span>
+            <span class="tag c">Detection Rule</span>
+            <span class="tag p">Incident Response</span>
+          </div>
+        </div>
+        <span class="lab-arrow">→</span>
+      </a>
+
+      <!-- Unauthorized TOR -->
+      <a href="https://github.com/KaiSec22/Security-Projects" target="_blank" rel="noopener" class="lab-card fade">
+        <span class="lab-num">03</span>
+        <div class="lab-body">
+          <p class="lab-title">Unauthorized TOR Usage — Threat Hunt</p>
+          <div class="lab-meta">
+            <span>Microsoft Defender for Endpoint</span><span class="dot">·</span>
+            <span>KQL</span><span class="dot">·</span>
+            <span>Apr 2026</span>
+          </div>
+          <p class="lab-desc">
+            Hypothesis-driven hunt confirming TOR browser silent installation, process execution,
+            and outbound network activity on a corporate endpoint. Correlated telemetry across
+            DeviceFileEvents, DeviceProcessEvents, and DeviceNetworkEvents — identifying the installer,
+            the execution chain, active TOR ports, and a user-created artifact on disk.
+          </p>
+          <div class="tag-row">
+            <span class="tag c">T1090</span>
+            <span class="tag c">T1572</span>
+            <span class="tag c">Network Evasion</span>
+            <span class="tag p">MDE</span>
+          </div>
+        </div>
+        <span class="lab-arrow">→</span>
+      </a>
+
+      <!-- Insider / Data Staging -->
+      <a href="https://github.com/KaiSec22/Security-Projects" target="_blank" rel="noopener" class="lab-card fade">
+        <span class="lab-num">04</span>
+        <div class="lab-body">
+          <p class="lab-title">Data Staging Investigation — Insider Threat</p>
+          <div class="lab-meta">
+            <span>Microsoft Defender for Endpoint</span><span class="dot">·</span>
+            <span>KQL</span><span class="dot">·</span>
+            <span>Mar 2026</span>
+          </div>
+          <p class="lab-desc">
+            Investigated suspected insider exfiltration, reconstructing a cmd → PowerShell (-ExecutionPolicy Bypass)
+            → 7-Zip execution chain that staged employee data into ZIP archives in C:\ProgramData.
+            Confirmed deliberate data packaging; network telemetry could not directly attribute
+            outbound connections to the staging processes.
+          </p>
+          <div class="tag-row">
+            <span class="tag c">T1560.001</span>
+            <span class="tag c">T1059.001</span>
+            <span class="tag c">T1105</span>
+            <span class="tag p">Insider Threat</span>
+          </div>
+        </div>
+        <span class="lab-arrow">→</span>
+      </a>
+
+      <!-- VM Brute Force -->
+      <a href="https://github.com/KaiSec22/Security-Projects" target="_blank" rel="noopener" class="lab-card fade">
+        <span class="lab-num">05</span>
+        <div class="lab-body">
+          <p class="lab-title">Azure VM Brute Force — Exposure Investigation</p>
+          <div class="lab-meta">
+            <span>Microsoft Defender for Endpoint</span><span class="dot">·</span>
+            <span>KQL</span><span class="dot">·</span>
+            <span>2026</span>
+          </div>
+          <p class="lab-desc">
+            Proactive threat hunt on an internet-exposed VM with no lockout policy. Identified
+            multiple external IPs generating high-volume failed authentication attempts consistent
+            with automated brute-force tooling. Correlated failed and successful logon events
+            to confirm no unauthorized access from identified sources.
+          </p>
+          <div class="tag-row">
+            <span class="tag c">T1110</span>
+            <span class="tag c">T1133</span>
+            <span class="tag c">Threat Hunting</span>
+            <span class="tag p">Azure</span>
+          </div>
+        </div>
+        <span class="lab-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SKILLS ══════════════════ -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label">// Stack</p>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-divider"></div>
+    <div class="fade">
+      <div class="skills-cloud">
+        <span class="skill-pill hi">KQL</span>
+        <span class="skill-pill hi">Microsoft Defender for Endpoint</span>
+        <span class="skill-pill hi">Microsoft Sentinel</span>
+        <span class="skill-pill hi">PowerShell</span>
+        <span class="skill-pill">MITRE ATT&amp;CK</span>
+        <span class="skill-pill">Sysmon</span>
+        <span class="skill-pill">Windows Security Events</span>
+        <span class="skill-pill">Threat Hunting</span>
+        <span class="skill-pill">Incident Response</span>
+        <span class="skill-pill">NIST 800-61</span>
+        <span class="skill-pill">STIG Compliance</span>
+        <span class="skill-pill">Azure</span>
+        <span class="skill-pill">Log Analytics Workspace</span>
+        <span class="skill-pill">EDR Analysis</span>
+        <span class="skill-pill">Detection Engineering</span>
+        <span class="skill-pill">NSG / Network Hardening</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CONTACT ══════════════════ -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label">// Reach Out</p>
+    <h2 class="section-title">Contact</h2>
+    <div class="section-divider"></div>
+    <div class="contact-grid fade">
+      <div>
+        <p class="contact-blurb">
+          Currently open to roles in threat detection, incident response, and security operations.
+          If you're building interesting detection problems or hunting real adversaries, let's talk.
+        </p>
+        <a href="#labs" class="btn btn-ghost" style="display:inline-flex;">View My Work</a>
+      </div>
+      <div class="contact-links">
+        <div class="contact-row" style="cursor:default;">
+          <div class="contact-icon">✉</div>
+          <span id="email-val">itshwoe@gmail.com</span>
+          <button class="copy-btn" id="copy-btn" onclick="copyEmail()">copy</button>
+        </div>
+        <a href="https://linkedin.com/in/kai-gallette/" target="_blank" rel="noopener" class="contact-row">
+          <div class="contact-icon">in</div>
+          linkedin.com/in/kai-gallette
+          <span class="ext-arrow">↗</span>
+        </a>
+        <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="contact-row">
+          <div class="contact-icon">gh</div>
+          github.com/KaiSec22
+          <span class="ext-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="container">
+    <p>Kai Gallette &nbsp;·&nbsp; KaiSec22 &nbsp;·&nbsp; Built with HTML</p>
+  </div>
+</footer>
+
+<!-- Back to Top -->
+<a href="#hero" id="top-btn" title="Back to top">↑</a>
+
+<!-- ══════════════════ SCRIPTS ══════════════════ -->
+<script>
+// ── Scroll fade-in
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade').forEach(el => io.observe(el));
+
+// ── Active nav highlight
+const sections = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  document.getElementById('top-btn').classList.toggle('show', window.scrollY > 500);
+}, { passive: true });
+
+// ── Copy email
+function copyEmail() {
+  navigator.clipboard.writeText('itshwoe@gmail.com').then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'copied!';
+    btn.style.color = 'var(--accent)';
+    setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
