@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sofia+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 /* ─── DESIGN TOKENS (dark) ─── */
 :root {
@@ -31,7 +31,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'IBM Plex Sans', -apple-system, system-ui, sans-serif;
+  font-family: 'Sofia Sans', Arial, sans-serif;
   background: var(--parchment); color: var(--olive-ink);
   line-height: 1.5; -webkit-font-smoothing: antialiased;
 }
@@ -191,54 +191,62 @@ nav {
 .skill[data-skill].active { background: var(--orange); color: #fff; border-color: var(--orange); }
 
 /* ─── ACCORDION ─── */
-.accordion { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.accordion { border: none; border-radius: 0; overflow: visible; }
 
 .acc-section {
-  border-bottom: 1px solid var(--border);
-  border-left: 3px solid transparent;
-  transition: opacity 0.25s, border-left-color 0.2s;
+  border-top: 1px solid var(--border);
+  border-left: none;
+  transition: opacity 0.25s;
 }
-.acc-section:last-child { border-bottom: none; }
-.acc-section.matched { border-left-color: var(--orange); }
-.acc-section.dimmed { opacity: 0.18; pointer-events: none; }
+.acc-section:last-child { border-bottom: 1px solid var(--border); }
+.acc-section.matched .acc-name { color: var(--orange); }
+.acc-section.matched .acc-count { color: var(--orange); }
+.acc-section.matched .acc-rule { border-color: rgba(245, 78, 0, 0.25); }
+.acc-section.dimmed { opacity: 0.15; pointer-events: none; }
 
 .acc-header {
-  width: 100%; display: flex; align-items: center; gap: 10px;
-  padding: 0 20px; height: 54px;
-  background: var(--sage-cream); border: none; cursor: pointer;
-  text-align: left; transition: background 0.15s; user-select: none;
+  width: 100%; display: flex; align-items: center;
+  padding: 26px 0; gap: 0;
+  background: none; border: none; cursor: pointer;
+  text-align: left; user-select: none;
+  transition: opacity 0.15s;
 }
-.acc-header:hover { background: var(--light-sage); }
-.acc-section.open .acc-header { background: var(--light-sage); }
+.acc-header:hover { background: none; }
+.acc-header:hover .acc-name { color: var(--orange); }
+.acc-section.open .acc-header { background: none; }
 
 .acc-toggle {
-  font-family: 'IBM Plex Mono', monospace; font-size: 9px;
-  color: var(--sage-ph); transition: transform 0.22s ease; flex-shrink: 0;
+  font-family: 'IBM Plex Mono', monospace; font-size: 8px;
+  color: var(--sage-ph); transition: transform 0.22s ease;
+  flex-shrink: 0; margin-right: 20px; opacity: 0.9;
 }
 .acc-section.open .acc-toggle { transform: rotate(90deg); }
 
 .acc-name {
-  font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700;
-  letter-spacing: 0.10em; text-transform: uppercase; color: var(--deep-olive);
+  font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--deep-olive);
+  flex-shrink: 0; transition: color 0.15s;
 }
-.acc-dot { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--sage-ph); }
+.acc-dot {
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+  color: var(--sage-ph); flex-shrink: 0; margin: 0 6px;
+}
 .acc-sub {
   font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500;
   letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted-olive);
+  flex-shrink: 0;
 }
 .acc-count {
-  margin-left: auto; font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px; font-weight: 600; color: var(--sage-ph);
-  background: var(--light-sage); border: 1px solid var(--border);
-  border-radius: 4px; padding: 2px 9px; flex-shrink: 0;
-  transition: color 0.2s, border-color 0.2s;
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;
+  color: var(--sage-ph); flex-shrink: 0;
+  background: none; border: none; padding: 0; margin-left: auto;
+  transition: color 0.2s;
 }
-.acc-section.matched .acc-count { color: var(--orange); border-color: var(--orange); }
 
 .acc-body {
   max-height: 0; overflow: hidden;
-  transition: max-height 0.35s ease;
-  background: var(--parchment);
+  transition: max-height 0.4s ease;
+  border-top: 1px solid var(--border);
 }
 .acc-section.open .acc-body { max-height: 2000px; }
 
@@ -246,9 +254,9 @@ nav {
 .acc-item {
   display: grid; grid-template-columns: 1fr auto;
   align-items: start; gap: 12px;
-  padding: 18px 20px 18px 28px;
+  padding: 20px 4px 20px 36px;
   border-bottom: 1px solid var(--border);
-  text-decoration: none; background: var(--parchment);
+  text-decoration: none; background: none;
   transition: background 0.15s;
 }
 .acc-item:last-child { border-bottom: none; }
@@ -287,9 +295,9 @@ nav {
 .stig-desc-block p { font-size: 14px; line-height: 1.65; color: var(--muted-olive); margin-bottom: 8px; }
 .stig-readme {
   font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;
-  color: var(--orange); text-decoration: none; transition: opacity 0.15s;
+  color: var(--muted-olive); text-decoration: none; transition: color 0.15s;
 }
-.stig-readme:hover { opacity: 0.72; }
+.stig-readme:hover { color: var(--orange); }
 
 .stig-grid { display: grid; grid-template-columns: 1fr 1fr; }
 .stig-cell {
@@ -305,9 +313,9 @@ nav {
 
 .stig-id {
   font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600;
-  color: var(--orange); flex-shrink: 0; white-space: nowrap; transition: opacity 0.15s;
+  color: var(--muted-olive); flex-shrink: 0; white-space: nowrap; transition: color 0.15s;
 }
-.stig-cell:hover .stig-id { opacity: 0.75; }
+.stig-cell:hover .stig-id { color: var(--orange); }
 .stig-name { font-size: 13px; font-weight: 500; color: var(--olive-ink); line-height: 1.3; transition: color 0.15s; }
 .stig-cell:hover .stig-name { color: var(--deep-olive); }
 
@@ -361,9 +369,23 @@ footer {
 #top-btn.show { opacity: 1; pointer-events: all; }
 #top-btn:hover { opacity: 0.75; }
 
+/* ─── HOVER GROW ─── */
+.btn-dark, .btn-sage, .nav-cta,
+.skill[data-skill], #top-btn {
+  transition: transform 0.15s ease, background 0.15s, color 0.15s, opacity 0.15s, border-color 0.15s;
+}
+.btn-dark:hover, .btn-sage:hover, .nav-cta:hover,
+.skill[data-skill]:hover, #top-btn:hover {
+  transform: scale(1.04);
+}
+
 /* ─── SCROLL FADE ─── */
 .fade { opacity: 0; transform: translateY(16px); transition: opacity 0.45s ease, transform 0.45s ease; }
 .fade.in { opacity: 1; transform: none; }
+
+/* ─── ORANGE CURSOR ─── */
+* { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='24' viewBox='0 0 20 24'%3E%3Cpath d='M0 0 L0 18 L4.5 13.5 L7.5 21 L10.5 19.5 L7.5 12 L13 12 Z' fill='%23F54E00' stroke='%231b1d17' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") 0 0, auto !important; }
+a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item, [onclick], label[for] { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='24' viewBox='0 0 20 24'%3E%3Cpath d='M0 0 L0 18 L4.5 13.5 L7.5 21 L10.5 19.5 L7.5 12 L13 12 Z' fill='%23F54E00' stroke='%231b1d17' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") 0 0, pointer !important; }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
@@ -397,8 +419,8 @@ footer {
     KaiSec22
   </a>
   <ul class="nav-links">
-    <li><a href="#projects-labs">Projects &amp; Labs</a></li>
     <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects-labs">Projects &amp; Labs</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Open to roles</a>
@@ -454,10 +476,10 @@ footer {
         <span class="skill">Azure</span>
         <span class="skill" data-skill="NIST 800-61">NIST 800-61</span>
         <span class="skill" data-skill="DISA STIG">DISA STIG</span>
-        <span class="skill">Threat Hunting</span>
+        <span class="skill" data-skill="Threat Hunting">Threat Hunting</span>
         <span class="skill">Detection Engineering</span>
         <span class="skill">Incident Response</span>
-        <span class="skill">Log Analysis</span>
+        <span class="skill" data-skill="Log Analysis">Log Analysis</span>
         <span class="skill">Compliance Automation</span>
         <span class="skill">Windows Security</span>
         <span class="skill">Network Forensics</span>
@@ -472,7 +494,7 @@ footer {
     <div class="accordion fade" id="main-accordion">
 
       <!-- ── AZURE ── -->
-      <div class="acc-section" id="acc-azure" data-skills="KQL,MDE">
+      <div class="acc-section" id="acc-azure" data-skills="KQL,MDE,Log Analysis">
         <button class="acc-header" onclick="toggleAcc('acc-azure')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Azure</span>
@@ -517,7 +539,7 @@ footer {
       </div>
 
       <!-- ── MICROSOFT DEFENDER ── -->
-      <div class="acc-section" id="acc-defender" data-skills="KQL,MDE">
+      <div class="acc-section" id="acc-defender" data-skills="KQL,MDE,Threat Hunting,Log Analysis">
         <button class="acc-header" onclick="toggleAcc('acc-defender')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Microsoft-Defender</span>
@@ -546,7 +568,7 @@ footer {
       </div>
 
       <!-- ── MICROSOFT SENTINEL ── -->
-      <div class="acc-section" id="acc-sentinel" data-skills="KQL,Sentinel,NIST 800-61">
+      <div class="acc-section" id="acc-sentinel" data-skills="KQL,Sentinel,NIST 800-61,Log Analysis">
         <button class="acc-header" onclick="toggleAcc('acc-sentinel')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Microsoft-Sentinel</span>
@@ -628,7 +650,7 @@ footer {
       </div>
 
       <!-- ── THREAT HUNTS ── -->
-      <div class="acc-section" id="acc-hunts" data-skills="KQL,Sentinel,Sysmon">
+      <div class="acc-section" id="acc-hunts" data-skills="KQL,Sentinel,Sysmon,Threat Hunting,Log Analysis">
         <button class="acc-header" onclick="toggleAcc('acc-hunts')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Threat-Hunts</span>
@@ -846,6 +868,7 @@ function copyEmail() {
   /* expose for dismiss button onclick */
   window.dismissFilter = clearFilter;
 })();
+
 </script>
 </body>
 </html>
