@@ -9,44 +9,84 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ─── DESIGN TOKENS (PostHog-inspired) ─── */
+/* ─── DESIGN TOKENS (dark) ─── */
 :root {
-  --parchment:   #fdfdf8;
-  --sage-cream:  #eeefe9;
-  --light-sage:  #e5e7e0;
-  --warm-tan:    #d4c9b8;
-  --hover-white: #f4f4f4;
-  --olive-ink:   #4d4f46;
-  --deep-olive:  #23251d;
-  --muted-olive: #65675e;
-  --sage-ph:     #9ea096;
+  --parchment:   #1b1d17;
+  --sage-cream:  #21241c;
+  --light-sage:  #282b22;
+  --warm-tan:    #33362d;
+  --hover-white: #2d3028;
+  --olive-ink:   #bfc1b9;
+  --deep-olive:  #eaebe5;
+  --muted-olive: #8c8e87;
+  --sage-ph:     #636560;
   --orange:      #F54E00;
   --amber:       #F7A501;
-  --dark-cta:    #1e1f23;
-  --border:      #bfc1b7;
-  --border-lt:   #b6b7af;
+  --dark-cta:    #eaebe5;
+  --border:      #2e3129;
+  --border-lt:   #393c34;
   --nav-h: 56px;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-
 body {
-  font-family: 'IBM Plex Sans', -apple-system, system-ui, Helvetica Neue, Arial, sans-serif;
+  font-family: 'IBM Plex Sans', -apple-system, system-ui, sans-serif;
+  background: var(--parchment); color: var(--olive-ink);
+  line-height: 1.5; -webkit-font-smoothing: antialiased;
+}
+
+/* ─── BLUR TRANSITIONS (applied to non-accordion elements) ─── */
+#hero, #skills-wrap, #contact, footer {
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+body.filter-active #hero,
+body.filter-active #skills-wrap,
+body.filter-active #contact,
+body.filter-active footer {
+  filter: blur(4px);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+/* ─── FILTER DISMISS BUTTON ─── */
+.filter-dismiss {
+  position: fixed;
+  top: calc(var(--nav-h) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--parchment);
-  color: var(--olive-ink);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+  color: var(--orange);
+  border: 1px solid var(--orange);
+  border-radius: 9999px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, background 0.15s, color 0.15s;
+  z-index: 300;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-dismiss.visible { opacity: 1; pointer-events: all; }
+.filter-dismiss:hover { background: var(--orange); color: #fff; }
+.filter-dismiss-x {
+  font-size: 14px;
+  line-height: 1;
 }
 
 /* ─── NAV ─── */
 nav {
-  position: sticky; top: 0;
-  height: var(--nav-h);
-  background: var(--parchment);
-  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; height: var(--nav-h);
+  background: var(--parchment); border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem; z-index: 100;
+  padding: 0 2rem; z-index: 200;
 }
 .nav-brand {
   font-size: 15px; font-weight: 700; color: var(--deep-olive);
@@ -62,11 +102,11 @@ nav {
 }
 .nav-links a:hover { color: var(--orange); text-decoration: underline; }
 .nav-cta {
-  background: var(--dark-cta); color: #fff; border: none; border-radius: 6px;
+  background: var(--dark-cta); color: var(--parchment); border: none; border-radius: 6px;
   padding: 8px 14px; font-size: 14px; font-weight: 600; font-family: inherit;
   cursor: pointer; text-decoration: none; transition: opacity 0.15s; display: inline-block;
 }
-.nav-cta:hover { opacity: 0.75; color: var(--amber); }
+.nav-cta:hover { opacity: 0.82; color: var(--orange); }
 
 /* ─── LAYOUT ─── */
 .wrap { max-width: 1160px; margin: 0 auto; padding: 0 2rem; }
@@ -81,16 +121,12 @@ nav {
   letter-spacing: -0.5px; color: var(--deep-olive); margin-bottom: 8px;
 }
 .section-sub {
-  font-size: 16px; font-weight: 400; line-height: 1.6;
-  color: var(--muted-olive); max-width: 640px; margin-bottom: 40px;
+  font-size: 16px; line-height: 1.6; color: var(--muted-olive);
+  max-width: 640px; margin-bottom: 40px;
 }
 
 /* ─── HERO ─── */
-#hero { padding: 72px 0 64px; border-bottom: 1px solid var(--border); }
-.hero-layout {
-  display: grid; grid-template-columns: 1fr auto;
-  align-items: start; gap: 3rem;
-}
+#hero { padding: 80px 0 72px; border-bottom: 1px solid var(--border); }
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
@@ -99,139 +135,181 @@ nav {
 }
 .hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--olive-ink); }
 .hero-name {
-  font-size: clamp(2.2rem, 4.5vw, 3.25rem); font-weight: 700;
-  line-height: 1.10; letter-spacing: -1px; color: var(--deep-olive); margin-bottom: 4px;
+  font-size: clamp(2.4rem, 5vw, 3.5rem); font-weight: 700;
+  line-height: 1.08; letter-spacing: -1.5px; color: var(--deep-olive); margin-bottom: 4px;
 }
-.hero-handle {
-  font-family: 'IBM Plex Mono', monospace; font-size: 15px;
-  color: var(--sage-ph); margin-bottom: 20px; display: block;
-}
-.hero-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+.hero-handle { font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: var(--sage-ph); margin-bottom: 20px; display: block; }
+.hero-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
 .hero-tag {
-  font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
-  padding: 3px 9px; border-radius: 4px; background: var(--light-sage);
-  color: var(--olive-ink); border: 1px solid var(--border); transition: color 0.15s;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 9px;
+  border-radius: 4px; background: var(--light-sage); color: var(--olive-ink);
+  border: 1px solid var(--border); transition: color 0.15s;
 }
 .hero-tag:hover { color: var(--orange); }
-.hero-bio {
-  font-size: 18px; font-weight: 400; line-height: 1.65;
-  color: var(--muted-olive); max-width: 580px; margin-bottom: 32px;
-}
-.hero-focus { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
-.focus-item {
-  font-size: 14px; font-weight: 600; color: var(--muted-olive);
-  display: flex; align-items: center; gap: 6px;
-}
-.focus-item::before {
-  content: '//'; font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px; color: var(--sage-ph);
-}
+.hero-bio { font-size: 18px; line-height: 1.65; color: var(--muted-olive); max-width: 620px; margin-bottom: 32px; }
+.hero-focus { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 36px; }
+.focus-item { font-size: 14px; font-weight: 600; color: var(--muted-olive); display: flex; align-items: center; gap: 6px; }
+.focus-item::before { content: '//'; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted-olive); }
 .hero-cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
 /* ─── BUTTONS ─── */
 .btn-dark {
-  background: var(--dark-cta); color: #fff; border: none; border-radius: 6px;
+  background: var(--dark-cta); color: var(--parchment); border: none; border-radius: 6px;
   padding: 10px 18px; font-size: 15px; font-weight: 600; font-family: inherit;
-  cursor: pointer; text-decoration: none; display: inline-block;
-  transition: opacity 0.15s, color 0.15s;
+  cursor: pointer; text-decoration: none; display: inline-block; transition: opacity 0.15s, color 0.15s;
 }
-.btn-dark:hover { opacity: 0.72; color: var(--amber); }
+.btn-dark:hover { opacity: 0.82; color: var(--orange); }
 .btn-sage {
-  background: var(--light-sage); color: var(--olive-ink);
-  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--light-sage); color: var(--olive-ink); border: 1px solid var(--border); border-radius: 6px;
   padding: 10px 18px; font-size: 15px; font-weight: 600; font-family: inherit;
-  cursor: pointer; text-decoration: none; display: inline-block;
-  transition: background 0.15s, color 0.15s;
+  cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.15s, color 0.15s;
 }
 .btn-sage:hover { background: var(--hover-white); color: var(--orange); }
 
-/* ─── CARDS ─── */
-.card-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1px; border: 1px solid var(--border); border-radius: 6px;
-  overflow: hidden; background: var(--border);
-}
-.card {
-  background: var(--parchment); padding: 24px; text-decoration: none;
-  display: flex; flex-direction: column; gap: 12px;
-  transition: background 0.15s; position: relative;
-}
-.card:hover { background: var(--hover-white); }
-.card-emoji { font-size: 24px; margin-bottom: 4px; display: block; }
-.card-title {
-  font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--deep-olive);
-  letter-spacing: -0.3px; transition: color 0.15s;
-}
-.card:hover .card-title { color: var(--orange); }
-.card-desc { font-size: 15px; font-weight: 400; line-height: 1.65; color: var(--muted-olive); flex: 1; }
-.tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
+/* ─── TAGS ─── */
 .tag {
   font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500;
   padding: 2px 7px; border-radius: 4px; background: var(--sage-cream);
-  color: var(--muted-olive); border: 1px solid var(--border); transition: color 0.15s;
-}
-.card:hover .tag { color: var(--orange); border-color: var(--border-lt); }
-.card-link {
-  font-size: 13px; font-weight: 600; color: var(--sage-ph);
-  font-family: 'IBM Plex Mono', monospace; margin-top: 8px;
-  display: flex; align-items: center; gap: 4px; transition: color 0.15s;
-}
-.card:hover .card-link { color: var(--orange); }
-
-/* ─── LABS ─── */
-.labs-table { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-.lab-row {
-  display: grid; grid-template-columns: 48px 1fr auto;
-  align-items: center; gap: 0; border-bottom: 1px solid var(--border);
-  text-decoration: none; background: var(--parchment); transition: background 0.15s;
-}
-.lab-row:last-child { border-bottom: none; }
-.lab-row:hover { background: var(--hover-white); }
-.lab-num {
-  font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500;
-  color: var(--sage-ph); text-align: center; border-right: 1px solid var(--border);
-  align-self: stretch; display: flex; align-items: flex-start;
-  justify-content: center; padding-top: 22px;
-}
-.lab-body { padding: 20px 24px; }
-.lab-title {
-  font-size: 16px; font-weight: 700; line-height: 1.3; color: var(--deep-olive);
-  letter-spacing: -0.2px; margin-bottom: 5px; transition: color 0.15s;
-}
-.lab-row:hover .lab-title { color: var(--orange); }
-.lab-meta {
-  font-size: 13px; color: var(--sage-ph); display: flex; align-items: center;
-  gap: 6px; flex-wrap: wrap; margin-bottom: 8px;
-  font-family: 'IBM Plex Mono', monospace;
-}
-.lab-meta .sep { opacity: 0.5; }
-.lab-desc { font-size: 14px; line-height: 1.65; color: var(--muted-olive); margin-bottom: 10px; }
-.lab-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-.lab-arrow {
-  padding: 0 20px; font-size: 16px; color: var(--sage-ph);
-  align-self: center; border-left: 1px solid var(--border); height: 100%;
-  display: flex; align-items: center; transition: color 0.15s;
-  white-space: nowrap; min-height: 80px;
-}
-.lab-row:hover .lab-arrow { color: var(--orange); }
-.lab-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
-  padding: 2px 8px; border-radius: 9999px;
-  background: var(--warm-tan); color: var(--deep-olive); border: 1px solid var(--border);
-  margin-bottom: 8px;
+  color: var(--muted-olive); border: 1px solid var(--border);
 }
 
 /* ─── SKILLS ─── */
-.skills-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+#skills-wrap {
+  padding: 40px 0 36px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.skills-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
 .skill {
   font-size: 14px; font-weight: 500; color: var(--olive-ink);
   background: var(--sage-cream); border: 1px solid var(--border); border-radius: 9999px;
   padding: 5px 14px; transition: color 0.15s, background 0.15s, border-color 0.15s; cursor: default;
 }
-.skill:hover { color: var(--orange); background: var(--hover-white); border-color: var(--orange); }
 .skill.hi { background: var(--light-sage); font-weight: 700; color: var(--deep-olive); }
-.skill.hi:hover { color: var(--orange); }
+.skill[data-skill] { cursor: pointer; }
+.skill[data-skill]:hover { color: var(--orange); background: var(--hover-white); border-color: var(--orange); }
+.skill[data-skill].active { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+/* ─── ACCORDION ─── */
+.accordion { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+
+.acc-section {
+  border-bottom: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  transition: opacity 0.25s, border-left-color 0.2s;
+}
+.acc-section:last-child { border-bottom: none; }
+.acc-section.matched { border-left-color: var(--orange); }
+.acc-section.dimmed { opacity: 0.18; pointer-events: none; }
+
+.acc-header {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 0 20px; height: 54px;
+  background: var(--sage-cream); border: none; cursor: pointer;
+  text-align: left; transition: background 0.15s; user-select: none;
+}
+.acc-header:hover { background: var(--light-sage); }
+.acc-section.open .acc-header { background: var(--light-sage); }
+
+.acc-toggle {
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+  color: var(--sage-ph); transition: transform 0.22s ease; flex-shrink: 0;
+}
+.acc-section.open .acc-toggle { transform: rotate(90deg); }
+
+.acc-name {
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase; color: var(--deep-olive);
+}
+.acc-dot { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--sage-ph); }
+.acc-sub {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted-olive);
+}
+.acc-count {
+  margin-left: auto; font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 600; color: var(--sage-ph);
+  background: var(--light-sage); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2px 9px; flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s;
+}
+.acc-section.matched .acc-count { color: var(--orange); border-color: var(--orange); }
+
+.acc-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease;
+  background: var(--parchment);
+}
+.acc-section.open .acc-body { max-height: 2000px; }
+
+/* ─── ACCORDION ITEMS ─── */
+.acc-item {
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: start; gap: 12px;
+  padding: 18px 20px 18px 28px;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none; background: var(--parchment);
+  transition: background 0.15s;
+}
+.acc-item:last-child { border-bottom: none; }
+.acc-item:hover { background: var(--hover-white); }
+
+.acc-item-title {
+  font-size: 15px; font-weight: 600; color: var(--deep-olive);
+  margin-bottom: 5px; line-height: 1.3; transition: color 0.15s;
+}
+.acc-item:hover .acc-item-title { color: var(--orange); }
+
+.acc-item-meta {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--sage-ph); display: flex; gap: 6px;
+  align-items: center; flex-wrap: wrap; margin-bottom: 8px;
+}
+.acc-item-meta .sep { opacity: 0.5; }
+.acc-item-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.acc-item-badge {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 9999px;
+  background: var(--warm-tan); color: var(--deep-olive); border: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.acc-arrow { font-size: 14px; color: var(--sage-ph); padding-top: 2px; transition: color 0.15s; flex-shrink: 0; }
+.acc-item:hover .acc-arrow { color: var(--orange); }
+
+/* ─── STIG GRID ─── */
+.stig-desc-block {
+  padding: 16px 20px 14px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.stig-desc-block p { font-size: 14px; line-height: 1.65; color: var(--muted-olive); margin-bottom: 8px; }
+.stig-readme {
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;
+  color: var(--orange); text-decoration: none; transition: opacity 0.15s;
+}
+.stig-readme:hover { opacity: 0.72; }
+
+.stig-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.stig-cell {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 20px 13px 28px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  transition: background 0.15s; text-decoration: none;
+}
+.stig-cell:nth-child(even) { border-right: none; padding-left: 20px; }
+.stig-cell:nth-last-child(-n+2) { border-bottom: none; }
+.stig-cell:hover { background: var(--hover-white); }
+
+.stig-id {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600;
+  color: var(--orange); flex-shrink: 0; white-space: nowrap; transition: opacity 0.15s;
+}
+.stig-cell:hover .stig-id { opacity: 0.75; }
+.stig-name { font-size: 13px; font-weight: 500; color: var(--olive-ink); line-height: 1.3; transition: color 0.15s; }
+.stig-cell:hover .stig-name { color: var(--deep-olive); }
 
 /* ─── CONTACT ─── */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
@@ -269,198 +347,47 @@ footer {
 }
 .footer-text { font-size: 13px; color: var(--sage-ph); font-family: 'IBM Plex Mono', monospace; }
 .footer-links { display: flex; gap: 16px; }
-.footer-links a {
-  font-size: 13px; font-weight: 500; color: var(--sage-ph);
-  text-decoration: none; transition: color 0.15s;
-}
+.footer-links a { font-size: 13px; font-weight: 500; color: var(--sage-ph); text-decoration: none; transition: color 0.15s; }
 .footer-links a:hover { color: var(--orange); }
 
 /* ─── BACK TO TOP ─── */
 #top-btn {
-  position: fixed; bottom: 24px; right: 24px; background: var(--dark-cta); color: #fff;
+  position: fixed; bottom: 24px; right: 24px; background: var(--orange); color: #fff;
   border: none; border-radius: 4px; width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center; font-size: 14px;
   cursor: pointer; text-decoration: none; opacity: 0; pointer-events: none;
-  transition: opacity 0.2s, color 0.15s; z-index: 99;
+  transition: opacity 0.2s; z-index: 99;
 }
 #top-btn.show { opacity: 1; pointer-events: all; }
-#top-btn:hover { opacity: 0.75; color: var(--amber); }
+#top-btn:hover { opacity: 0.75; }
 
 /* ─── SCROLL FADE ─── */
 .fade { opacity: 0; transform: translateY(16px); transition: opacity 0.45s ease, transform 0.45s ease; }
 .fade.in { opacity: 1; transform: none; }
-
-/* ─── ATT&CK WIDGET ─── */
-.attck-widget {
-  background: var(--sage-cream);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  overflow: hidden;
-  min-width: 280px;
-  max-width: 316px;
-  flex-shrink: 0;
-}
-.attck-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-  background: var(--light-sage);
-}
-.attck-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted-olive);
-}
-.attck-count {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--sage-ph);
-  background: var(--parchment);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 2px 7px;
-}
-.attck-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  padding: 12px 12px 10px;
-}
-.attck-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  background: var(--parchment);
-  color: var(--muted-olive);
-  cursor: pointer;
-  transition: color 0.15s, background 0.15s, border-color 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  line-height: 1;
-  position: relative;
-}
-.attck-tag::before {
-  content: '';
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-/* Tactic colors via dot */
-.attck-tag[data-tactic="Credential Access"]::before  { background: #c4a882; }
-.attck-tag[data-tactic="Lateral Movement"]::before   { background: #8fa08a; }
-.attck-tag[data-tactic="Exfiltration"]::before       { background: #7a7f72; }
-.attck-tag[data-tactic="Defense Evasion"]::before    { background: #9ea096; }
-.attck-tag[data-tactic="Execution"]::before          { background: #5a5c53; }
-.attck-tag[data-tactic="Command and Control"]::before { background: #a09880; }
-.attck-tag[data-tactic="Collection"]::before         { background: #b0b3aa; }
-.attck-tag[data-tactic="Persistence"]::before        { background: #849080; }
-
-.attck-tag:hover {
-  background: var(--hover-white);
-  color: var(--deep-olive);
-  border-color: var(--border-lt);
-}
-.attck-tag.active {
-  background: var(--deep-olive);
-  color: #fff;
-  border-color: var(--deep-olive);
-}
-.attck-tag.active::before { background: var(--orange); }
-
-.attck-detail {
-  border-top: 1px solid var(--border);
-  min-height: 90px;
-  padding: 12px 14px;
-  transition: opacity 0.2s;
-}
-.attck-detail-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 90px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--sage-ph);
-  text-align: center;
-  line-height: 1.5;
-}
-.attck-detail-id {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--orange);
-  margin-bottom: 2px;
-  letter-spacing: 0.03em;
-}
-.attck-detail-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--deep-olive);
-  margin-bottom: 4px;
-  letter-spacing: -0.2px;
-  line-height: 1.3;
-}
-.attck-detail-tactic {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--sage-ph);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 8px;
-}
-.attck-detail-labs {
-  font-size: 11.5px;
-  color: var(--muted-olive);
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-.attck-detail-labs span {
-  font-weight: 600;
-  color: var(--olive-ink);
-}
-.attck-detail-link {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--sage-ph);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  transition: color 0.15s;
-}
-.attck-detail-link:hover { color: var(--orange); }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
   nav { padding: 0 1.25rem; }
   .nav-links { display: none; }
   .wrap { padding: 0 1.25rem; }
-  #hero { padding: 48px 0; }
-  .hero-layout { grid-template-columns: 1fr; }
-  .attck-widget { display: none; }
+  #hero { padding: 52px 0 48px; }
   .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-  .lab-row { grid-template-columns: 1fr auto; }
-  .lab-num { display: none; }
+  .stig-grid { grid-template-columns: 1fr; }
+  .stig-cell { border-right: none !important; }
+  .stig-cell:nth-last-child(-n+2) { border-bottom: 1px solid var(--border) !important; }
+  .stig-cell:last-child { border-bottom: none !important; }
   .section-heading { font-size: 24px; }
   .hero-name { font-size: 2rem; }
 }
 </style>
 </head>
 <body>
+
+<!-- FILTER DISMISS -->
+<button class="filter-dismiss" id="filter-dismiss" onclick="dismissFilter()">
+  <span class="filter-dismiss-x">&#x2715;</span>
+  <span id="dismiss-label">Clear filter</span>
+</button>
 
 <!-- NAV -->
 <nav>
@@ -470,8 +397,7 @@ footer {
     KaiSec22
   </a>
   <ul class="nav-links">
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#labs">Labs</a></li>
+    <li><a href="#projects-labs">Projects &amp; Labs</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -481,249 +407,53 @@ footer {
 <!-- HERO -->
 <section id="hero">
   <div class="wrap">
-    <div class="hero-layout">
-      <div>
-        <div class="hero-eyebrow">
-          <span class="hero-eyebrow-dot"></span>
-          Security Portfolio
-        </div>
-        <h1 class="hero-name">Kai Gallette</h1>
-        <span class="hero-handle">@KaiSec22</span>
-        <div class="hero-tags">
-          <span class="hero-tag">Threat Hunting</span>
-          <span class="hero-tag">Detection Engineering</span>
-          <span class="hero-tag">Incident Response</span>
-        </div>
-        <p class="hero-bio">
-          I hunt threats and build detections across Microsoft Defender and Sentinel
-          environments — tracking adversaries from first execution through domain
-          compromise, and closing incidents from first alert to containment.
-        </p>
-        <div class="hero-focus">
-          <div class="focus-item">KQL &amp; MDE</div>
-          <div class="focus-item">Microsoft Sentinel</div>
-          <div class="focus-item">STIG Automation</div>
-        </div>
-        <div class="hero-cta-row">
-          <a href="#labs" class="btn-dark">View investigations</a>
-          <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="btn-sage">GitHub &#8599;</a>
-        </div>
-      </div>
-
-      <!-- ATT&CK Technique Widget -->
-      <div class="attck-widget" id="attck-widget">
-        <div class="attck-header">
-          <span class="attck-title">MITRE ATT&amp;CK</span>
-          <span class="attck-count" id="attck-count">11 techniques</span>
-        </div>
-        <div class="attck-tags" id="attck-tags"></div>
-        <div class="attck-detail" id="attck-detail">
-          <div class="attck-detail-empty" id="attck-empty">&#8592; select a technique</div>
-        </div>
-      </div>
-
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Security Portfolio
+    </div>
+    <h1 class="hero-name">Kai Gallette</h1>
+    <span class="hero-handle">@KaiSec22</span>
+    <div class="hero-tags">
+      <span class="hero-tag">Threat Hunting</span>
+      <span class="hero-tag">Detection Engineering</span>
+      <span class="hero-tag">Incident Response</span>
+    </div>
+    <p class="hero-bio">
+      I hunt threats and build detections across Microsoft Defender and Sentinel
+      environments — tracking adversaries from first execution through domain
+      compromise, and closing incidents from first alert to containment.
+    </p>
+    <div class="hero-focus">
+      <div class="focus-item">KQL &amp; MDE</div>
+      <div class="focus-item">Microsoft Sentinel</div>
+      <div class="focus-item">STIG Automation</div>
+    </div>
+    <div class="hero-cta-row">
+      <a href="#projects-labs" class="btn-dark">View projects</a>
+      <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="btn-sage">GitHub &#8599;</a>
     </div>
   </div>
 </section>
 
-<!-- PROJECTS -->
-<section id="projects" class="section">
+<!-- PROJECTS & LABS -->
+<section id="projects-labs" class="section">
   <div class="wrap">
-    <p class="section-eyebrow">Built</p>
-    <h2 class="section-heading">Projects</h2>
-    <p class="section-sub">Tools and automation I've written — scripted compliance controls, detection logic, and infrastructure hardening.</p>
-    <div class="card-grid fade">
-      <a href="https://github.com/KaiSec22/Security-Projects/tree/main/Tenable/STIG-Implementations" target="_blank" rel="noopener" class="card">
-        <span class="card-emoji">&#9881;&#65039;</span>
-        <p class="card-title">Windows 11 STIG Compliance Scripts</p>
-        <p class="card-desc">
-          PowerShell automation scripts implementing Windows 11 DISA STIG controls —
-          account lockout duration, process creation auditing, HTTP printing policy,
-          and additional hardening benchmarks. Each script validates its own output
-          after applying the control.
-        </p>
-        <div class="tag-row">
-          <span class="tag">PowerShell</span>
-          <span class="tag">STIG</span>
-          <span class="tag">Compliance</span>
-          <span class="tag">Automation</span>
-          <span class="tag">WN11</span>
-        </div>
-        <p class="card-link">Security-Projects / STIG-Implementations &#8594;</p>
-      </a>
-    </div>
-  </div>
-</section>
 
-<!-- LABS -->
-<section id="labs" class="section">
-  <div class="wrap">
-    <p class="section-eyebrow">Investigated</p>
-    <h2 class="section-heading">Labs &amp; Investigations</h2>
-    <p class="section-sub">Threat hunts, incident response exercises, and detection engineering labs — all documented with KQL, findings, and recommendations.</p>
-
-    <div class="labs-table fade">
-
-      <!-- 01 EmberForge -->
-      <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Threat-Hunts/EmberForge-Source-Leak.md"
-         target="_blank" rel="noopener" class="lab-row">
-        <span class="lab-num">01</span>
-        <div class="lab-body">
-          <div class="lab-badge">Advanced &middot; 44 Flags</div>
-          <p class="lab-title">EmberForge Source Leak — Threat Hunt</p>
-          <div class="lab-meta">
-            <span>Microsoft Sentinel</span><span class="sep">&middot;</span>
-            <span>KQL</span><span class="sep">&middot;</span>
-            <span>Sysmon</span><span class="sep">&middot;</span>
-            <span>Apr 2026</span>
-          </div>
-          <p class="lab-desc">
-            Full-chain multi-stage intrusion reconstruction across workstation, server, and Domain Controller.
-            Covered ISO payload delivery, C2 beacon, fodhelper UAC bypass, LSASS credential dump,
-            SMB lateral movement, ntds.dit extraction via shadow copy, rclone exfiltration to MEGA,
-            AnyDesk persistence, and wevtutil log clearing. 44 investigation flags completed.
-          </p>
-          <div class="lab-tags">
-            <span class="tag">T1055 &middot; Process Injection</span>
-            <span class="tag">T1003 &middot; Credential Dump</span>
-            <span class="tag">T1021 &middot; Lateral Movement</span>
-            <span class="tag">T1048 &middot; Exfiltration</span>
-            <span class="tag">Domain Compromise</span>
-          </div>
-        </div>
-        <span class="lab-arrow">&#8594;</span>
-      </a>
-
-      <!-- 02 Sentinel Brute Force -->
-      <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Sentinel/Brute-Force-Attempt-Detection-Incident-Response/Brute-Force-Attempt-Detection-Incident-Response.md"
-         target="_blank" rel="noopener" class="lab-row">
-        <span class="lab-num">02</span>
-        <div class="lab-body">
-          <p class="lab-title">Brute Force Detection &amp; Incident Response — Sentinel</p>
-          <div class="lab-meta">
-            <span>Microsoft Sentinel</span><span class="sep">&middot;</span>
-            <span>KQL</span><span class="sep">&middot;</span>
-            <span>NIST 800-61</span><span class="sep">&middot;</span>
-            <span>2026</span>
-          </div>
-          <p class="lab-desc">
-            Built a Sentinel scheduled analytics rule detecting &ge;10 failed logons from the same source IP
-            within 5 hours. Worked the resulting incident through the full NIST 800-61 lifecycle —
-            entity graph investigation, failed-to-success validation query, NSG containment to restrict
-            RDP exposure, and structured incident closure.
-          </p>
-          <div class="lab-tags">
-            <span class="tag">T1110 &middot; Brute Force</span>
-            <span class="tag">T1133 &middot; External Remote Services</span>
-            <span class="tag">Detection Rule</span>
-            <span class="tag">Incident Response</span>
-          </div>
-        </div>
-        <span class="lab-arrow">&#8594;</span>
-      </a>
-
-      <!-- 03 TOR Hunt -->
-      <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Defender/Unauthorized-Tor-Usage/Unauthorized-Tor-Usage-Hunt.md"
-         target="_blank" rel="noopener" class="lab-row">
-        <span class="lab-num">03</span>
-        <div class="lab-body">
-          <p class="lab-title">Unauthorized TOR Usage — Threat Hunt</p>
-          <div class="lab-meta">
-            <span>Microsoft Defender for Endpoint</span><span class="sep">&middot;</span>
-            <span>KQL</span><span class="sep">&middot;</span>
-            <span>Apr 2026</span>
-          </div>
-          <p class="lab-desc">
-            Hypothesis-driven hunt confirming TOR browser silent installation, process execution, and
-            outbound network activity on a corporate endpoint. Correlated telemetry across
-            DeviceFileEvents, DeviceProcessEvents, and DeviceNetworkEvents — confirming the installer,
-            execution chain, active TOR ports, and a suspicious user-created artifact on disk.
-          </p>
-          <div class="lab-tags">
-            <span class="tag">T1090 &middot; Proxy</span>
-            <span class="tag">T1572 &middot; Protocol Tunneling</span>
-            <span class="tag">Network Evasion</span>
-            <span class="tag">MDE</span>
-          </div>
-        </div>
-        <span class="lab-arrow">&#8594;</span>
-      </a>
-
-      <!-- 04 Insider Threat -->
-      <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Azure/Data-Exfiltration-Investigation/Data-Exfiltration-Investigation.md"
-         target="_blank" rel="noopener" class="lab-row">
-        <span class="lab-num">04</span>
-        <div class="lab-body">
-          <p class="lab-title">Data Staging Investigation — Insider Threat</p>
-          <div class="lab-meta">
-            <span>Microsoft Defender for Endpoint</span><span class="sep">&middot;</span>
-            <span>KQL</span><span class="sep">&middot;</span>
-            <span>Mar 2026</span>
-          </div>
-          <p class="lab-desc">
-            Investigated suspected insider exfiltration, reconstructing a cmd &rarr; PowerShell
-            (-ExecutionPolicy Bypass) &rarr; 7-Zip execution chain that staged employee data into ZIP
-            archives in C:\ProgramData. Confirmed deliberate data packaging; network telemetry could
-            not directly attribute outbound connections to the staging processes.
-          </p>
-          <div class="lab-tags">
-            <span class="tag">T1560.001 &middot; Archive via Utility</span>
-            <span class="tag">T1059.001 &middot; PowerShell</span>
-            <span class="tag">T1105 &middot; Ingress Tool Transfer</span>
-            <span class="tag">Insider Threat</span>
-          </div>
-        </div>
-        <span class="lab-arrow">&#8594;</span>
-      </a>
-
-      <!-- 05 VM Brute Force -->
-      <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Azure/VM-Exposure-Brute-Force-Investigation/VM-Exposure-Brute-Force-Investigation.md"
-         target="_blank" rel="noopener" class="lab-row">
-        <span class="lab-num">05</span>
-        <div class="lab-body">
-          <p class="lab-title">Azure VM Brute Force — Exposure Investigation</p>
-          <div class="lab-meta">
-            <span>Microsoft Defender for Endpoint</span><span class="sep">&middot;</span>
-            <span>KQL</span><span class="sep">&middot;</span>
-            <span>2026</span>
-          </div>
-          <p class="lab-desc">
-            Proactive hypothesis-driven hunt on an internet-exposed VM with no lockout policy.
-            Identified multiple external IPs generating high-volume failed authentication attempts
-            consistent with automated tooling. Correlated failed and successful logon events to
-            confirm no unauthorized access occurred from the identified sources.
-          </p>
-          <div class="lab-tags">
-            <span class="tag">T1110 &middot; Brute Force</span>
-            <span class="tag">T1133 &middot; External Remote Services</span>
-            <span class="tag">Threat Hunting</span>
-            <span class="tag">Azure</span>
-          </div>
-        </div>
-        <span class="lab-arrow">&#8594;</span>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<!-- SKILLS -->
-<section id="skills" class="section">
-  <div class="wrap">
-    <p class="section-eyebrow">Stack</p>
-    <h2 class="section-heading">Skills</h2>
-    <p class="section-sub">Tools, platforms, and frameworks I work with regularly.</p>
-    <div class="fade">
+    <!-- SKILLS FILTER -->
+    <div id="skills-wrap">
+      <p class="section-eyebrow">Stack</p>
+      <h2 class="section-heading" id="skills">Skills</h2>
+      <p class="section-sub" style="margin-bottom: 20px;">Click any skill to filter projects below.</p>
       <div class="skills-cloud">
-        <span class="skill hi">KQL</span>
-        <span class="skill hi">Microsoft Defender for Endpoint</span>
-        <span class="skill hi">Microsoft Sentinel</span>
-        <span class="skill hi">PowerShell</span>
+        <span class="skill hi" data-skill="KQL">KQL</span>
+        <span class="skill hi" data-skill="MDE">Microsoft Defender for Endpoint</span>
+        <span class="skill hi" data-skill="Sentinel">Microsoft Sentinel</span>
+        <span class="skill hi" data-skill="PowerShell">PowerShell</span>
         <span class="skill hi">MITRE ATT&amp;CK</span>
-        <span class="skill">Sysmon</span>
+        <span class="skill" data-skill="Sysmon">Sysmon</span>
         <span class="skill">Azure</span>
-        <span class="skill">NIST 800-61</span>
-        <span class="skill">DISA STIG</span>
+        <span class="skill" data-skill="NIST 800-61">NIST 800-61</span>
+        <span class="skill" data-skill="DISA STIG">DISA STIG</span>
         <span class="skill">Threat Hunting</span>
         <span class="skill">Detection Engineering</span>
         <span class="skill">Incident Response</span>
@@ -733,6 +463,203 @@ footer {
         <span class="skill">Network Forensics</span>
       </div>
     </div>
+
+    <p class="section-eyebrow">Work</p>
+    <h2 class="section-heading">Projects &amp; Labs</h2>
+    <p class="section-sub">Threat hunts, incident response exercises, detection engineering, and compliance automation — organized by platform.</p>
+
+    <!-- ACCORDION -->
+    <div class="accordion fade" id="main-accordion">
+
+      <!-- ── AZURE ── -->
+      <div class="acc-section" id="acc-azure" data-skills="KQL,MDE">
+        <button class="acc-header" onclick="toggleAcc('acc-azure')">
+          <span class="acc-toggle">&#9654;</span>
+          <span class="acc-name">Azure</span>
+          <span class="acc-dot">&nbsp;·&nbsp;</span>
+          <span class="acc-sub">Threat Hunting</span>
+          <span class="acc-count">2</span>
+        </button>
+        <div class="acc-body">
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Azure/Data-Exfiltration-Investigation/Data-Exfiltration-Investigation.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">Data Staging Investigation — Insider Threat</div>
+              <div class="acc-item-meta">
+                <span>Microsoft Defender for Endpoint</span><span class="sep">·</span>
+                <span>KQL</span><span class="sep">·</span><span>Mar 2026</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">T1560.001 · Archive via Utility</span>
+                <span class="tag">T1059.001 · PowerShell</span>
+                <span class="tag">Insider Threat</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Azure/VM-Exposure-Brute-Force-Investigation/VM-Exposure-Brute-Force-Investigation.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">VM Exposure Brute Force — Exposure Investigation</div>
+              <div class="acc-item-meta">
+                <span>Microsoft Defender for Endpoint</span><span class="sep">·</span>
+                <span>KQL</span><span class="sep">·</span><span>2026</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">T1110 · Brute Force</span>
+                <span class="tag">T1133 · External Remote Services</span>
+                <span class="tag">Threat Hunting</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── MICROSOFT DEFENDER ── -->
+      <div class="acc-section" id="acc-defender" data-skills="KQL,MDE">
+        <button class="acc-header" onclick="toggleAcc('acc-defender')">
+          <span class="acc-toggle">&#9654;</span>
+          <span class="acc-name">Microsoft-Defender</span>
+          <span class="acc-dot">&nbsp;·&nbsp;</span>
+          <span class="acc-sub">Threat Hunting</span>
+          <span class="acc-count">1</span>
+        </button>
+        <div class="acc-body">
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Defender/Unauthorized-Tor-Usage/Unauthorized-Tor-Usage-Hunt.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">Unauthorized TOR Usage — Threat Hunt</div>
+              <div class="acc-item-meta">
+                <span>Microsoft Defender for Endpoint</span><span class="sep">·</span>
+                <span>KQL</span><span class="sep">·</span><span>Apr 2026</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">T1090 · Proxy</span>
+                <span class="tag">T1572 · Protocol Tunneling</span>
+                <span class="tag">Network Evasion</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── MICROSOFT SENTINEL ── -->
+      <div class="acc-section" id="acc-sentinel" data-skills="KQL,Sentinel,NIST 800-61">
+        <button class="acc-header" onclick="toggleAcc('acc-sentinel')">
+          <span class="acc-toggle">&#9654;</span>
+          <span class="acc-name">Microsoft-Sentinel</span>
+          <span class="acc-dot">&nbsp;·&nbsp;</span>
+          <span class="acc-sub">Detection &amp; IR</span>
+          <span class="acc-count">1</span>
+        </button>
+        <div class="acc-body">
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Sentinel/Brute-Force-Attempt-Detection-Incident-Response/Brute-Force-Attempt-Detection-Incident-Response.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">Brute Force Detection &amp; Incident Response</div>
+              <div class="acc-item-meta">
+                <span>Microsoft Sentinel</span><span class="sep">·</span>
+                <span>KQL</span><span class="sep">·</span>
+                <span>NIST 800-61</span><span class="sep">·</span><span>2026</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">T1110 · Brute Force</span>
+                <span class="tag">Detection Rule</span>
+                <span class="tag">Incident Response</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── TENABLE ── -->
+      <div class="acc-section" id="acc-tenable" data-skills="PowerShell,DISA STIG">
+        <button class="acc-header" onclick="toggleAcc('acc-tenable')">
+          <span class="acc-toggle">&#9654;</span>
+          <span class="acc-name">Tenable</span>
+          <span class="acc-dot">&nbsp;·&nbsp;</span>
+          <span class="acc-sub">STIG Implementations</span>
+          <span class="acc-count">8</span>
+        </button>
+        <div class="acc-body">
+          <div class="stig-desc-block">
+            <p>Windows 11 STIG remediation writeups — each documents the finding, scan output before/after, and the PowerShell or GPO remediation applied.</p>
+            <a href="https://github.com/KaiSec22/Security-Projects/tree/main/Tenable/STIG-Implementations"
+               target="_blank" rel="noopener" class="stig-readme">README &#8599;</a>
+          </div>
+          <div class="stig-grid">
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-AU-000050.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-AU-000050</span>
+              <span class="stig-name">Enable Process Creation Auditing</span>
+            </a>
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-AU-000500.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-AU-000500</span>
+              <span class="stig-name">Enable Other Logon/Logoff Auditing</span>
+            </a>
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-AU-000560.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-AU-000560</span>
+              <span class="stig-name">Enable Logon Auditing</span>
+            </a>
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-CC-000110.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-CC-000110</span>
+              <span class="stig-name">Disable HTTP Printing</span>
+            </a>
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-CC-000185.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-CC-000185</span>
+              <span class="stig-name">Disable Autorun Commands</span>
+            </a>
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-CC-000315.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-CC-000315</span>
+              <span class="stig-name">Disable Automatic Elevation</span>
+            </a>
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-AC-000005.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-AC-000005</span>
+              <span class="stig-name">Configure Account Lockout Duration</span>
+            </a>
+            <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Tenable/STIG-Implementations/WN11-AC-000010.ps1" target="_blank" rel="noopener" class="stig-cell">
+              <span class="stig-id">WN11-AC-000010</span>
+              <span class="stig-name">Limit Logon Attempts</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── THREAT HUNTS ── -->
+      <div class="acc-section" id="acc-hunts" data-skills="KQL,Sentinel,Sysmon">
+        <button class="acc-header" onclick="toggleAcc('acc-hunts')">
+          <span class="acc-toggle">&#9654;</span>
+          <span class="acc-name">Threat-Hunts</span>
+          <span class="acc-dot">&nbsp;·&nbsp;</span>
+          <span class="acc-sub">Advanced Investigation</span>
+          <span class="acc-count">1</span>
+        </button>
+        <div class="acc-body">
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Threat-Hunts/EmberForge-Source-Leak.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-badge">Advanced &middot; 44 Flags</div>
+              <div class="acc-item-title">EmberForge Source Leak — Threat Hunt</div>
+              <div class="acc-item-meta">
+                <span>Microsoft Sentinel</span><span class="sep">·</span>
+                <span>KQL</span><span class="sep">·</span>
+                <span>Sysmon</span><span class="sep">·</span><span>Apr 2026</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">T1003 · Credential Dump</span>
+                <span class="tag">T1021 · Lateral Movement</span>
+                <span class="tag">T1048 · Exfiltration</span>
+                <span class="tag">Domain Compromise</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /accordion -->
   </div>
 </section>
 
@@ -752,7 +679,7 @@ footer {
         </a>
       </div>
       <div class="contact-list">
-        <div class="contact-item" id="email-row" style="cursor:pointer;" onclick="copyEmail()">
+        <div class="contact-item" style="cursor:pointer;" onclick="copyEmail()">
           <div class="contact-icon">@</div>
           <span>itshwoe@gmail.com</span>
           <button class="copy-btn" id="copy-btn" onclick="copyEmail(); event.stopPropagation()">copy</button>
@@ -777,7 +704,6 @@ footer {
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <span class="footer-text">&#47;&#47; Kai Gallette &mdash; Security Portfolio &mdash; 2026</span>
   <div class="footer-links">
@@ -789,6 +715,12 @@ footer {
 <a href="#hero" id="top-btn" aria-label="Back to top">&#8593;</a>
 
 <script>
+/* ─── ACCORDION ─── */
+function toggleAcc(id) {
+  var section = document.getElementById(id);
+  section.classList.toggle('open');
+}
+
 /* ─── SCROLL FADE ─── */
 (function () {
   var els = document.querySelectorAll('.fade');
@@ -796,23 +728,26 @@ footer {
     entries.forEach(function (e) {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.08 });
   els.forEach(function (el) { io.observe(el); });
 })();
 
 /* ─── ACTIVE NAV ─── */
 (function () {
-  var sections = ['hero','projects','labs','skills','contact'];
+  var sections = ['hero', 'projects-labs', 'contact'];
   var links = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', function () {
     var scrollY = window.scrollY + 80;
     var current = '';
     sections.forEach(function (id) {
       var el = document.getElementById(id);
-      if (el && el.offsetTop <= scrollY) { current = id; }
+      if (el && el.offsetTop <= scrollY) current = id;
     });
     links.forEach(function (a) {
-      a.style.color = (a.getAttribute('href') === '#' + current) ? 'var(--orange)' : '';
+      var href = a.getAttribute('href').replace('#', '');
+      var isActive = href === current ||
+        (href === 'skills' && current === 'projects-labs');
+      a.style.color = isActive ? 'var(--orange)' : '';
     });
   }, { passive: true });
 })();
@@ -834,149 +769,82 @@ function copyEmail() {
   }).catch(function () { btn.textContent = 'copy'; });
 }
 
-/* ─── ATT&CK WIDGET ─── */
+/* ─── SKILL FILTER ─── */
 (function () {
-  var techniques = [
-    {
-      id: 'T1003',
-      name: 'OS Credential Dumping',
-      tactic: 'Credential Access',
-      desc: 'LSASS memory access to extract credentials.',
-      labs: ['EmberForge Source Leak'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Threat-Hunts/EmberForge-Source-Leak.md']
-    },
-    {
-      id: 'T1021',
-      name: 'Remote Services',
-      tactic: 'Lateral Movement',
-      desc: 'SMB-based lateral movement to Domain Controller.',
-      labs: ['EmberForge Source Leak'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Threat-Hunts/EmberForge-Source-Leak.md']
-    },
-    {
-      id: 'T1048',
-      name: 'Exfiltration Over Alt. Protocol',
-      tactic: 'Exfiltration',
-      desc: 'rclone exfiltration of ntds.dit to MEGA cloud storage.',
-      labs: ['EmberForge Source Leak'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Threat-Hunts/EmberForge-Source-Leak.md']
-    },
-    {
-      id: 'T1055',
-      name: 'Process Injection',
-      tactic: 'Defense Evasion',
-      desc: 'Injection used during intrusion chain execution.',
-      labs: ['EmberForge Source Leak'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Threat-Hunts/EmberForge-Source-Leak.md']
-    },
-    {
-      id: 'T1059.001',
-      name: 'PowerShell',
-      tactic: 'Execution',
-      desc: 'PowerShell -ExecutionPolicy Bypass to invoke 7-Zip staging.',
-      labs: ['Data Staging Investigation'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Azure/Data-Exfiltration-Investigation/Data-Exfiltration-Investigation.md']
-    },
-    {
-      id: 'T1090',
-      name: 'Proxy',
-      tactic: 'Command and Control',
-      desc: 'TOR browser used to proxy outbound traffic from endpoint.',
-      labs: ['Unauthorized TOR Usage Hunt'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Defender/Unauthorized-Tor-Usage/Unauthorized-Tor-Usage-Hunt.md']
-    },
-    {
-      id: 'T1105',
-      name: 'Ingress Tool Transfer',
-      tactic: 'Command and Control',
-      desc: 'Silent installation of TOR browser on corporate device.',
-      labs: ['Data Staging Investigation'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Azure/Data-Exfiltration-Investigation/Data-Exfiltration-Investigation.md']
-    },
-    {
-      id: 'T1110',
-      name: 'Brute Force',
-      tactic: 'Credential Access',
-      desc: 'High-volume failed logon attempts from external IPs.',
-      labs: ['Brute Force Detection & IR', 'Azure VM Exposure Hunt'],
-      links: [
-        'https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Sentinel/Brute-Force-Attempt-Detection-Incident-Response/Brute-Force-Attempt-Detection-Incident-Response.md',
-        'https://github.com/KaiSec22/Security-Projects/blob/main/Azure/VM-Exposure-Brute-Force-Investigation/VM-Exposure-Brute-Force-Investigation.md'
-      ]
-    },
-    {
-      id: 'T1133',
-      name: 'External Remote Services',
-      tactic: 'Persistence',
-      desc: 'RDP exposure of internet-facing Azure VMs.',
-      labs: ['Brute Force Detection & IR', 'Azure VM Exposure Hunt'],
-      links: [
-        'https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Sentinel/Brute-Force-Attempt-Detection-Incident-Response/Brute-Force-Attempt-Detection-Incident-Response.md',
-        'https://github.com/KaiSec22/Security-Projects/blob/main/Azure/VM-Exposure-Brute-Force-Investigation/VM-Exposure-Brute-Force-Investigation.md'
-      ]
-    },
-    {
-      id: 'T1560.001',
-      name: 'Archive via Utility',
-      tactic: 'Collection',
-      desc: '7-Zip used to stage employee data into ZIP archives.',
-      labs: ['Data Staging Investigation'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Azure/Data-Exfiltration-Investigation/Data-Exfiltration-Investigation.md']
-    },
-    {
-      id: 'T1572',
-      name: 'Protocol Tunneling',
-      tactic: 'Command and Control',
-      desc: 'TOR circuit used for encrypted protocol tunneling.',
-      labs: ['Unauthorized TOR Usage Hunt'],
-      links: ['https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Defender/Unauthorized-Tor-Usage/Unauthorized-Tor-Usage-Hunt.md']
-    }
-  ];
+  var dismissBtn   = document.getElementById('filter-dismiss');
+  var dismissLabel = document.getElementById('dismiss-label');
+  var accSections  = document.querySelectorAll('.acc-section');
+  var pills        = document.querySelectorAll('.skill[data-skill]');
+  var active       = null;
 
-  var tagsEl = document.getElementById('attck-tags');
-  var detailEl = document.getElementById('attck-detail');
-  var emptyEl = document.getElementById('attck-empty');
-  var activeIdx = null;
-
-  techniques.forEach(function (t, i) {
-    var btn = document.createElement('button');
-    btn.className = 'attck-tag';
-    btn.setAttribute('data-tactic', t.tactic);
-    btn.setAttribute('aria-label', t.id + ' ' + t.name);
-    btn.textContent = t.id;
-    btn.addEventListener('click', function () {
-      if (activeIdx === i) {
-        /* deselect */
-        btn.classList.remove('active');
-        activeIdx = null;
-        showEmpty();
-        return;
-      }
-      document.querySelectorAll('.attck-tag').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      activeIdx = i;
-      showDetail(t);
+  pills.forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      var id = pill.getAttribute('data-skill');
+      if (active === id) { clearFilter(); return; }
+      applyFilter(id, pill.textContent.trim());
     });
-    tagsEl.appendChild(btn);
   });
 
-  function showEmpty() {
-    detailEl.innerHTML = '<div class="attck-detail-empty" id="attck-empty">← select a technique</div>';
+  function scrollTo(el, offset) {
+    var top = el.getBoundingClientRect().top + window.scrollY - (offset || 72);
+    window.scrollTo({ top: top, behavior: 'smooth' });
   }
 
-  function showDetail(t) {
-    var labsHtml = t.labs.map(function (lab, idx) {
-      return '<a class="attck-detail-link" href="' + t.links[idx] + '" target="_blank" rel="noopener">' +
-        lab + ' ↗</a>';
-    }).join('&nbsp;&nbsp;');
+  function applyFilter(id, label) {
+    active = id;
 
-    detailEl.innerHTML =
-      '<div class="attck-detail-id">' + t.id + '</div>' +
-      '<div class="attck-detail-name">' + t.name + '</div>' +
-      '<div class="attck-detail-tactic">' + t.tactic + '</div>' +
-      '<div class="attck-detail-labs">' + t.desc + '</div>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:6px;">' + labsHtml + '</div>';
+    /* highlight active pill */
+    pills.forEach(function (p) {
+      p.classList.toggle('active', p.getAttribute('data-skill') === id);
+    });
+
+    /* filter accordion sections */
+    var firstMatch = null;
+    accSections.forEach(function (sec) {
+      var skills = (sec.getAttribute('data-skills') || '').split(',');
+      var isMatch = skills.indexOf(id) !== -1;
+      sec.classList.toggle('matched', isMatch);
+      sec.classList.toggle('dimmed', !isMatch);
+      if (isMatch) {
+        sec.classList.add('open');
+        if (!firstMatch) firstMatch = sec;
+      } else {
+        sec.classList.remove('open');
+      }
+    });
+
+    /* blur surrounding page */
+    document.body.classList.add('filter-active');
+
+    /* show dismiss */
+    dismissLabel.textContent = 'Clear “' + label + '”';
+    dismissBtn.classList.add('visible');
+
+    /* scroll to first match after accordion begins opening */
+    if (firstMatch) {
+      setTimeout(function () {
+        scrollTo(firstMatch, 80);
+      }, 60);
+    }
   }
+
+  function clearFilter() {
+    active = null;
+    pills.forEach(function (p) { p.classList.remove('active'); });
+    accSections.forEach(function (sec) {
+      sec.classList.remove('matched', 'dimmed', 'open');
+    });
+    document.body.classList.remove('filter-active');
+    dismissBtn.classList.remove('visible');
+
+    /* scroll back to skills */
+    setTimeout(function () {
+      scrollTo(document.getElementById('skills-wrap'), 72);
+    }, 60);
+  }
+
+  /* expose for dismiss button onclick */
+  window.dismissFilter = clearFilter;
 })();
 </script>
 </body>
