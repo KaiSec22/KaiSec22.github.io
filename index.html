@@ -127,6 +127,67 @@ nav {
 
 /* ─── HERO ─── */
 #hero { padding: 80px 0 72px; border-bottom: 1px solid var(--border); }
+.hero-layout { display: grid; grid-template-columns: 1fr 340px; gap: 64px; align-items: center; }
+
+/* ─── CERT CAROUSEL ─── */
+.cert-carousel-wrap {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.cert-eyebrow {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--sage-ph);
+}
+.cert-carousel {
+  position: relative; height: 118px;
+}
+.cert-card {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 8px;
+  padding: 20px 20px 20px 22px;
+  background: var(--sage-cream); border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  border-radius: 6px; text-decoration: none;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+.cert-card.active { opacity: 1; pointer-events: all; }
+.cert-card.in-progress { border-left-color: var(--amber); }
+.cert-card:hover { background: var(--light-sage); }
+
+.cert-name {
+  font-size: 15px; font-weight: 700; color: var(--deep-olive);
+  line-height: 1.2;
+}
+.cert-issuer {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--muted-olive);
+}
+.cert-status-row { display: flex; align-items: center; justify-content: space-between; }
+.cert-badge {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 9999px;
+  background: var(--light-sage); color: var(--orange);
+  border: 1px solid rgba(245,78,0,0.25);
+}
+.cert-badge.wip {
+  color: var(--amber); border-color: rgba(247,165,1,0.25);
+}
+.cert-arrow { font-size: 13px; color: var(--sage-ph); transition: color 0.15s; }
+.cert-card:hover .cert-arrow { color: var(--orange); }
+
+.cert-dots { display: flex; gap: 6px; align-items: center; }
+.cert-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--border-lt); border: none; padding: 0; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.cert-dot.active { background: var(--orange); transform: scale(1.3); }
+
+@media (max-width: 768px) {
+  .hero-layout { grid-template-columns: 1fr; }
+  .cert-carousel-wrap { margin-top: 8px; }
+}
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
@@ -354,9 +415,6 @@ footer {
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
 }
 .footer-text { font-size: 13px; color: var(--sage-ph); font-family: 'IBM Plex Mono', monospace; }
-.footer-links { display: flex; gap: 16px; }
-.footer-links a { font-size: 13px; font-weight: 500; color: var(--sage-ph); text-decoration: none; transition: color 0.15s; }
-.footer-links a:hover { color: var(--orange); }
 
 /* ─── BACK TO TOP ─── */
 #top-btn {
@@ -429,30 +487,91 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
 <!-- HERO -->
 <section id="hero">
   <div class="wrap">
-    <div class="hero-eyebrow">
-      <span class="hero-eyebrow-dot"></span>
-      Security Portfolio
-    </div>
-    <h1 class="hero-name">Kai Gallette</h1>
-    <span class="hero-handle">@KaiSec22</span>
-    <div class="hero-tags">
-      <span class="hero-tag">Threat Hunting</span>
-      <span class="hero-tag">Detection Engineering</span>
-      <span class="hero-tag">Incident Response</span>
-    </div>
-    <p class="hero-bio">
-      I hunt threats and build detections across Microsoft Defender and Sentinel
-      environments — tracking adversaries from first execution through domain
-      compromise, and closing incidents from first alert to containment.
-    </p>
-    <div class="hero-focus">
-      <div class="focus-item">KQL &amp; MDE</div>
-      <div class="focus-item">Microsoft Sentinel</div>
-      <div class="focus-item">STIG Automation</div>
-    </div>
-    <div class="hero-cta-row">
-      <a href="#projects-labs" class="btn-dark">View projects</a>
-      <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="btn-sage">GitHub &#8599;</a>
+    <div class="hero-layout">
+
+      <!-- LEFT -->
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          Security Portfolio
+        </div>
+        <h1 class="hero-name">Kai Gallette</h1>
+        <span class="hero-handle">@KaiSec22</span>
+        <div class="hero-tags">
+          <span class="hero-tag">Threat Hunting</span>
+          <span class="hero-tag">Detection Engineering</span>
+          <span class="hero-tag">Incident Response</span>
+        </div>
+        <p class="hero-bio">
+          I hunt threats and build detections across Microsoft Defender and Sentinel
+          environments — tracking adversaries from first execution through domain
+          compromise, and closing incidents from first alert to containment.
+        </p>
+        <div class="hero-focus">
+          <div class="focus-item">KQL &amp; MDE</div>
+          <div class="focus-item">Microsoft Sentinel</div>
+          <div class="focus-item">STIG Automation</div>
+        </div>
+        <div class="hero-cta-row">
+          <a href="#projects-labs" class="btn-dark">View projects</a>
+          <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="btn-sage">GitHub &#8599;</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: CERT CAROUSEL -->
+      <div class="cert-carousel-wrap">
+        <span class="cert-eyebrow">Certifications</span>
+        <div class="cert-carousel" id="cert-carousel">
+
+          <a href="https://www.credly.com/badges/f8e46ab5-781b-4f66-87a7-2fc05cf5a35d"
+             target="_blank" rel="noopener" class="cert-card active">
+            <div class="cert-name">CompTIA Security+</div>
+            <div class="cert-issuer">CompTIA</div>
+            <div class="cert-status-row">
+              <span class="cert-badge">Verified</span>
+              <span class="cert-arrow">&#8599;</span>
+            </div>
+          </a>
+
+          <a href="https://learn.microsoft.com/en-us/users/kaisec-1363/credentials/c696c6c75f25f453"
+             target="_blank" rel="noopener" class="cert-card">
+            <div class="cert-name">Microsoft Azure Fundamentals</div>
+            <div class="cert-issuer">Microsoft · AZ-900</div>
+            <div class="cert-status-row">
+              <span class="cert-badge">Verified</span>
+              <span class="cert-arrow">&#8599;</span>
+            </div>
+          </a>
+
+          <a href="https://www.coursera.org/account/accomplishments/specialization/7388U6XGHL7H"
+             target="_blank" rel="noopener" class="cert-card">
+            <div class="cert-name">Google Cybersecurity Certificate</div>
+            <div class="cert-issuer">Google · Coursera</div>
+            <div class="cert-status-row">
+              <span class="cert-badge">Verified</span>
+              <span class="cert-arrow">&#8599;</span>
+            </div>
+          </a>
+
+          <a href="https://learn.microsoft.com/en-us/training/paths/sc-200-mitigate-threats-using-microsoft-365-defender/"
+             target="_blank" rel="noopener" class="cert-card in-progress">
+            <div class="cert-name">Microsoft Security Operations Analyst</div>
+            <div class="cert-issuer">Microsoft · SC-200</div>
+            <div class="cert-status-row">
+              <span class="cert-badge wip">In Progress</span>
+              <span class="cert-arrow">&#8599;</span>
+            </div>
+          </a>
+
+        </div>
+        <div class="cert-dots" id="cert-dots">
+          <button class="cert-dot active" onclick="goToCert(0)"></button>
+          <button class="cert-dot" onclick="goToCert(1)"></button>
+          <button class="cert-dot" onclick="goToCert(2)"></button>
+          <button class="cert-dot" onclick="goToCert(3)"></button>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -471,7 +590,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
         <span class="skill hi" data-skill="MDE">Microsoft Defender for Endpoint</span>
         <span class="skill hi" data-skill="Sentinel">Microsoft Sentinel</span>
         <span class="skill hi" data-skill="PowerShell">PowerShell</span>
-        <span class="skill hi">MITRE ATT&amp;CK</span>
+        <span class="skill hi" data-skill="MITRE ATT&CK">MITRE ATT&amp;CK</span>
         <span class="skill" data-skill="Sysmon">Sysmon</span>
         <span class="skill">Azure</span>
         <span class="skill" data-skill="NIST 800-61">NIST 800-61</span>
@@ -480,9 +599,10 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
         <span class="skill">Detection Engineering</span>
         <span class="skill">Incident Response</span>
         <span class="skill" data-skill="Log Analysis">Log Analysis</span>
-        <span class="skill">Compliance Automation</span>
-        <span class="skill">Windows Security</span>
-        <span class="skill">Network Forensics</span>
+        <span class="skill" data-skill="Compliance Automation">Compliance Automation</span>
+        <span class="skill" data-skill="Active Directory">Active Directory</span>
+        <span class="skill" data-skill="Windows Security">Windows Security</span>
+        <span class="skill" data-skill="Network Forensics">Network Forensics</span>
       </div>
     </div>
 
@@ -494,7 +614,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
     <div class="accordion fade" id="main-accordion">
 
       <!-- ── AZURE ── -->
-      <div class="acc-section" id="acc-azure" data-skills="KQL,MDE,Log Analysis">
+      <div class="acc-section" id="acc-azure" data-skills="KQL,MDE,Log Analysis,MITRE ATT&CK">
         <button class="acc-header" onclick="toggleAcc('acc-azure')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Azure</span>
@@ -539,7 +659,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       </div>
 
       <!-- ── MICROSOFT DEFENDER ── -->
-      <div class="acc-section" id="acc-defender" data-skills="KQL,MDE,Threat Hunting,Log Analysis">
+      <div class="acc-section" id="acc-defender" data-skills="KQL,MDE,Threat Hunting,Log Analysis,MITRE ATT&CK">
         <button class="acc-header" onclick="toggleAcc('acc-defender')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Microsoft-Defender</span>
@@ -568,7 +688,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       </div>
 
       <!-- ── MICROSOFT SENTINEL ── -->
-      <div class="acc-section" id="acc-sentinel" data-skills="KQL,Sentinel,NIST 800-61,Log Analysis">
+      <div class="acc-section" id="acc-sentinel" data-skills="KQL,Sentinel,NIST 800-61,Log Analysis,MITRE ATT&CK">
         <button class="acc-header" onclick="toggleAcc('acc-sentinel')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Microsoft-Sentinel</span>
@@ -598,7 +718,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       </div>
 
       <!-- ── TENABLE ── -->
-      <div class="acc-section" id="acc-tenable" data-skills="PowerShell,DISA STIG">
+      <div class="acc-section" id="acc-tenable" data-skills="PowerShell,DISA STIG,Compliance Automation">
         <button class="acc-header" onclick="toggleAcc('acc-tenable')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Tenable</span>
@@ -650,7 +770,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       </div>
 
       <!-- ── THREAT HUNTS ── -->
-      <div class="acc-section" id="acc-hunts" data-skills="KQL,Sentinel,Sysmon,Threat Hunting,Log Analysis">
+      <div class="acc-section" id="acc-hunts" data-skills="KQL,Sentinel,Sysmon,Threat Hunting,Log Analysis,MITRE ATT&CK">
         <button class="acc-header" onclick="toggleAcc('acc-hunts')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Threat-Hunts</span>
@@ -681,6 +801,87 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
         </div>
       </div>
 
+      <!-- ── ENDPOINT SECURITY ── -->
+      <div class="acc-section" id="acc-endpoint" data-skills="Sysmon,PowerShell,Log Analysis,MITRE ATT&CK,Threat Hunting,Windows Security">
+        <button class="acc-header" onclick="toggleAcc('acc-endpoint')">
+          <span class="acc-toggle">&#9654;</span>
+          <span class="acc-name">Endpoint-Security</span>
+          <span class="acc-dot">&nbsp;·&nbsp;</span>
+          <span class="acc-sub">Detection &amp; Visibility</span>
+          <span class="acc-count">1</span>
+        </button>
+        <div class="acc-body">
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Endpoint-Security/Endpoint-Logging.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">Endpoint Logging Visibility — Windows Event Logs, Sysmon &amp; PowerShell Detection</div>
+              <div class="acc-item-meta">
+                <span>Windows</span><span class="sep">·</span>
+                <span>Sysmon</span><span class="sep">·</span>
+                <span>PowerShell</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">T1059 · Command &amp; Scripting</span>
+                <span class="tag">T1053 · Scheduled Task</span>
+                <span class="tag">T1078 · Valid Accounts</span>
+                <span class="tag">Script Block Logging</span>
+                <span class="tag">Detection Engineering</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── HELP DESK ── -->
+      <div class="acc-section" id="acc-helpdesk" data-skills="Windows Security,Network Forensics,Active Directory">
+        <button class="acc-header" onclick="toggleAcc('acc-helpdesk')">
+          <span class="acc-toggle">&#9654;</span>
+          <span class="acc-name">Help-Desk</span>
+          <span class="acc-dot">&nbsp;·&nbsp;</span>
+          <span class="acc-sub">IT Support</span>
+          <span class="acc-count">2</span>
+        </button>
+        <div class="acc-body">
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Help-Desk/Networking-Troubleshooting.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">Networking Troubleshooting — Simulated Help Desk Internet Issues</div>
+              <div class="acc-item-meta">
+                <span>Windows 10</span><span class="sep">·</span>
+                <span>Network Diagnostics</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">DNS Failure</span>
+                <span class="tag">Routing &amp; Gateway</span>
+                <span class="tag">Adapter Disconnection</span>
+                <span class="tag">ipconfig · ping · nslookup</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Help-Desk/Windows-Server-Active-Directory.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">Active Directory — Domain Join to Account Recovery</div>
+              <div class="acc-item-meta">
+                <span>Windows Server 2022</span><span class="sep">·</span>
+                <span>Active Directory</span><span class="sep">·</span>
+                <span>Group Policy</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">Domain Join</span>
+                <span class="tag">Share Permissions</span>
+                <span class="tag">Account Lockout</span>
+                <span class="tag">Event Viewer</span>
+                <span class="tag">GPO</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+
     </div><!-- /accordion -->
   </div>
 </section>
@@ -703,7 +904,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       <div class="contact-list">
         <div class="contact-item" style="cursor:pointer;" onclick="copyEmail()">
           <div class="contact-icon">@</div>
-          <span>itshwoe@gmail.com</span>
+          <span>kgallette22@gmail.com</span>
           <button class="copy-btn" id="copy-btn" onclick="copyEmail(); event.stopPropagation()">copy</button>
         </div>
         <a href="https://github.com/KaiSec22" target="_blank" rel="noopener" class="contact-item">
@@ -728,10 +929,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
 
 <footer>
   <span class="footer-text">&#47;&#47; Kai Gallette &mdash; Security Portfolio &mdash; 2026</span>
-  <div class="footer-links">
-    <a href="https://github.com/KaiSec22" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://www.linkedin.com/in/kai-gallette/" target="_blank" rel="noopener">LinkedIn</a>
-  </div>
+  <span class="footer-text" style="padding-right: 56px;">Last updated: April 2026</span>
 </footer>
 
 <a href="#hero" id="top-btn" aria-label="Back to top">&#8593;</a>
@@ -785,7 +983,7 @@ function toggleAcc(id) {
 /* ─── COPY EMAIL ─── */
 function copyEmail() {
   var btn = document.getElementById('copy-btn');
-  navigator.clipboard.writeText('itshwoe@gmail.com').then(function () {
+  navigator.clipboard.writeText('kgallette22@gmail.com').then(function () {
     btn.textContent = 'copied!';
     setTimeout(function () { btn.textContent = 'copy'; }, 2000);
   }).catch(function () { btn.textContent = 'copy'; });
@@ -867,6 +1065,35 @@ function copyEmail() {
 
   /* expose for dismiss button onclick */
   window.dismissFilter = clearFilter;
+})();
+
+/* ─── CERT CAROUSEL ─── */
+(function () {
+  var cards = document.querySelectorAll('.cert-card');
+  var dots  = document.querySelectorAll('.cert-dot');
+  var current = 0;
+  var timer;
+
+  function show(n) {
+    cards[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (n + cards.length) % cards.length;
+    cards[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() { show(current + 1); }
+
+  function start() { timer = setInterval(next, 3000); }
+  function stop()  { clearInterval(timer); }
+
+  var wrap = document.getElementById('cert-carousel');
+  wrap.addEventListener('mouseenter', stop);
+  wrap.addEventListener('mouseleave', start);
+
+  window.goToCert = function (n) { stop(); show(n); start(); };
+
+  start();
 })();
 
 </script>
