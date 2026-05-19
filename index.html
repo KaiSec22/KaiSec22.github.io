@@ -591,18 +591,18 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
         <span class="skill hi" data-skill="Sentinel">Microsoft Sentinel</span>
         <span class="skill hi" data-skill="PowerShell">PowerShell</span>
         <span class="skill hi" data-skill="MITRE ATT&CK">MITRE ATT&amp;CK</span>
-        <span class="skill" data-skill="Sysmon">Sysmon</span>
-        <span class="skill">Azure</span>
-        <span class="skill" data-skill="NIST 800-61">NIST 800-61</span>
-        <span class="skill" data-skill="DISA STIG">DISA STIG</span>
-        <span class="skill" data-skill="Threat Hunting">Threat Hunting</span>
-        <span class="skill">Detection Engineering</span>
-        <span class="skill">Incident Response</span>
-        <span class="skill" data-skill="Log Analysis">Log Analysis</span>
-        <span class="skill" data-skill="Compliance Automation">Compliance Automation</span>
-        <span class="skill" data-skill="Active Directory">Active Directory</span>
-        <span class="skill" data-skill="Windows Security">Windows Security</span>
-        <span class="skill" data-skill="Network Forensics">Network Forensics</span>
+        <span class="skill hi" data-skill="Sysmon">Sysmon</span>
+        <span class="skill hi" data-skill="Azure">Azure</span>
+        <span class="skill hi" data-skill="NIST 800-61">NIST 800-61</span>
+        <span class="skill hi" data-skill="DISA STIG">DISA STIG</span>
+        <span class="skill hi" data-skill="Threat Hunting">Threat Hunting</span>
+        <span class="skill hi" data-skill="Detection Engineering">Detection Engineering</span>
+        <span class="skill hi" data-skill="Incident Response">Incident Response</span>
+        <span class="skill hi" data-skill="Log Analysis">Log Analysis</span>
+        <span class="skill hi" data-skill="Compliance Automation">Compliance Automation</span>
+        <span class="skill hi" data-skill="Active Directory">Active Directory</span>
+        <span class="skill hi" data-skill="Windows Security">Windows Security</span>
+        <span class="skill hi" data-skill="Network Forensics">Network Forensics</span>
       </div>
     </div>
 
@@ -614,7 +614,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
     <div class="accordion fade" id="main-accordion">
 
       <!-- ── AZURE ── -->
-      <div class="acc-section" id="acc-azure" data-skills="KQL,MDE,Log Analysis,MITRE ATT&CK">
+      <div class="acc-section" id="acc-azure" data-skills="KQL,MDE,Log Analysis,MITRE ATT&CK,Azure,Incident Response">
         <button class="acc-header" onclick="toggleAcc('acc-azure')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Azure</span>
@@ -688,13 +688,13 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       </div>
 
       <!-- ── MICROSOFT SENTINEL ── -->
-      <div class="acc-section" id="acc-sentinel" data-skills="KQL,Sentinel,NIST 800-61,Log Analysis,MITRE ATT&CK">
+      <div class="acc-section" id="acc-sentinel" data-skills="KQL,Sentinel,NIST 800-61,Log Analysis,MITRE ATT&CK,PowerShell,MDE,Detection Engineering,Incident Response">
         <button class="acc-header" onclick="toggleAcc('acc-sentinel')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Microsoft-Sentinel</span>
           <span class="acc-dot">&nbsp;·&nbsp;</span>
           <span class="acc-sub">Detection &amp; IR</span>
-          <span class="acc-count">1</span>
+          <span class="acc-count">3</span>
         </button>
         <div class="acc-body">
           <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Sentinel/Brute-Force-Attempt-Detection-Incident-Response/Brute-Force-Attempt-Detection-Incident-Response.md"
@@ -710,6 +710,43 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
                 <span class="tag">T1110 · Brute Force</span>
                 <span class="tag">Detection Rule</span>
                 <span class="tag">Incident Response</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Sentinel/SOC-Operations-Dashboard-Workbook/SOC-Operations-Dashboard-Workbook.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">SOC Operations Dashboard — Sentinel Workbook</div>
+              <div class="acc-item-meta">
+                <span>Microsoft Sentinel</span><span class="sep">·</span>
+                <span>KQL</span><span class="sep">·</span>
+                <span>MDE</span><span class="sep">·</span><span>May 2026</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">SOC Dashboard</span>
+                <span class="tag">Triage Queue</span>
+                <span class="tag">Detection Trends</span>
+                <span class="tag">SecurityIncident</span>
+              </div>
+            </div>
+            <span class="acc-arrow">&#8599;</span>
+          </a>
+          <a href="https://github.com/KaiSec22/Security-Projects/blob/main/Microsoft-Sentinel/Suspicious-Powershell-Analytics-Rule/Suspicious-Powershell-Analytics-Rule.md"
+             target="_blank" rel="noopener" class="acc-item">
+            <div>
+              <div class="acc-item-title">Suspicious PowerShell Analytics Rule &amp; Incident Investigation</div>
+              <div class="acc-item-meta">
+                <span>Microsoft Sentinel</span><span class="sep">·</span>
+                <span>KQL</span><span class="sep">·</span>
+                <span>MDE</span><span class="sep">·</span><span>May 2026</span>
+              </div>
+              <div class="acc-item-tags">
+                <span class="tag">T1059.001 · PowerShell</span>
+                <span class="tag">T1027 · Obfuscation</span>
+                <span class="tag">T1105 · Tool Transfer</span>
+                <span class="tag">Analytics Rule</span>
+                <span class="tag">Detection Tuning</span>
               </div>
             </div>
             <span class="acc-arrow">&#8599;</span>
@@ -770,7 +807,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       </div>
 
       <!-- ── THREAT HUNTS ── -->
-      <div class="acc-section" id="acc-hunts" data-skills="KQL,Sentinel,Sysmon,Threat Hunting,Log Analysis,MITRE ATT&CK">
+      <div class="acc-section" id="acc-hunts" data-skills="KQL,Sentinel,Sysmon,Threat Hunting,Log Analysis,MITRE ATT&CK,Detection Engineering,Incident Response">
         <button class="acc-header" onclick="toggleAcc('acc-hunts')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Threat-Hunts</span>
@@ -802,7 +839,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
       </div>
 
       <!-- ── ENDPOINT SECURITY ── -->
-      <div class="acc-section" id="acc-endpoint" data-skills="Sysmon,PowerShell,Log Analysis,MITRE ATT&CK,Threat Hunting,Windows Security">
+      <div class="acc-section" id="acc-endpoint" data-skills="Sysmon,PowerShell,Log Analysis,MITRE ATT&CK,Threat Hunting,Windows Security,Detection Engineering">
         <button class="acc-header" onclick="toggleAcc('acc-endpoint')">
           <span class="acc-toggle">&#9654;</span>
           <span class="acc-name">Endpoint-Security</span>
@@ -894,7 +931,7 @@ a, button, .skill[data-skill], .acc-header, .acc-item, .stig-cell, .contact-item
         <p class="section-eyebrow">Connect</p>
         <h2 class="section-heading">Open to roles</h2>
         <p class="contact-blurb">
-          Looking for opportunities in threat hunting, detection engineering, or incident response.
+          Looking for opportunities in threat hunting, detection engineering, incident response, or help desk.
           Reach out on LinkedIn or GitHub — I'm happy to talk through my work.
         </p>
         <a href="https://www.linkedin.com/in/kai-gallette/" target="_blank" rel="noopener" class="btn-dark">
